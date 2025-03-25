@@ -73,18 +73,23 @@ class CustomTextField extends StatelessWidget {
           horizontal: 16.w,
         ),
         hintText: hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide.none,
+        ),
         hintStyle: AppTextStyles.mediumLight.copyWith(
           color: const Color(0xFFA1A1AA),
         ),
         filled: true,
         fillColor: AppColors.gray50,
-        border: InputBorder.none,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
-          // borderSide: const BorderSide(color: AppColors.red300),
           borderSide: const BorderSide(color: AppColors.red60),
         ),
-        enabledBorder: InputBorder.none,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide.none,
+        ),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon != null
             ? GestureDetector(

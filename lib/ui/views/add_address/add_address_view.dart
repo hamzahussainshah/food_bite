@@ -24,59 +24,71 @@ class AddAddressView extends StackedView<AddAddressViewModel> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomImageView(
-                  imagePath: AppImages.nearByIcon,
-                  width: 160.w,
-                  height: 160.h,
-                  fit: BoxFit.contain,
+          child: SizedBox.expand(
+            // Ensures the scroll view takes full height
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height -
+                      48.h, // Adjust for padding and SafeArea
                 ),
-                48.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'Find Nearby Restaurants',
-                  style: AppTextStyles.xlBold,
-                ),
-                6.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'Enter your location or allow access to your location to find restaurants near you.',
-                  style: AppTextStyles.mediumLight.copyWith(
-                    color: AppColors.gray500,
+                child: IntrinsicHeight(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomImageView(
+                        imagePath: AppImages.nearByIcon,
+                        width: 160.w,
+                        height: 160.h,
+                        fit: BoxFit.contain,
+                      ),
+                      48.verticalSpace,
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Find Nearby Restaurants',
+                        style: AppTextStyles.xlBold,
+                      ),
+                      6.verticalSpace,
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Enter your location or allow access to your location to find restaurants near you.',
+                        style: AppTextStyles.mediumLight.copyWith(
+                          color: AppColors.gray500,
+                        ),
+                      ),
+                      40.verticalSpace,
+                      if (viewModel.addressController.text.isEmpty)
+                        CustomElevatedButton(
+                          onPressed: () {
+                            viewModel.useCurrentLocation();
+                          },
+                          text: 'Use current location',
+                        ),
+                      16.verticalSpace,
+                      CustomTextField(
+                        hintText: 'Enter a new address',
+                        controller: viewModel.addressController,
+                        onChanged: (value) {
+                          viewModel.address =
+                              value; // Updates address and triggers rebuild
+                        },
+                        validate: viewModel
+                            .validateAddress, // Updated to use view model method
+                        prefixIcon: const Icon(Icons.location_on_rounded),
+                        suffixIcon: viewModel.addressController.text.isNotEmpty
+                            ? Icon(Icons.cancel, color: AppColors.darkBlue)
+                            : null,
+                        onTapSuffix: () {
+                          viewModel.addressController.clear();
+                          viewModel.address = ''; // Ensure button reappears
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                    ],
                   ),
                 ),
-                40.verticalSpace,
-                if (viewModel.addressController.text.isEmpty)
-                  CustomElevatedButton(
-                    onPressed: () {
-                      viewModel.useCurrentLocation();
-                    },
-                    text: 'Use current location',
-                  ),
-                16.verticalSpace,
-                CustomTextField(
-                  hintText: 'Enter a new address',
-                  controller: viewModel.addressController,
-                  onChanged: (value) {
-                    viewModel.address =
-                        value; // Updates address and triggers rebuild
-                  },
-                  validate: viewModel
-                      .validateAddress, // Updated to use view model method
-                  prefixIcon: const Icon(Icons.location_on_rounded),
-                  suffixIcon: viewModel.addressController.text.isNotEmpty
-                      ? Icon(Icons.cancel, color: AppColors.darkBlue)
-                      : null,
-                  onTapSuffix: () {
-                    viewModel.addressController.clear();
-                    viewModel.address = ''; // Ensure button reappears
-                  },
-                  keyboardType: TextInputType.text,
-                ),
-              ],
+              ),
             ),
           ),
         ),

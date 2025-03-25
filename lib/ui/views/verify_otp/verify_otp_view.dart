@@ -24,89 +24,99 @@ class VerifyOtpView extends StackedView<VerifyOtpViewModel> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomImageView(
-                  imagePath: AppImages.nearByIcon,
-                  width: 160.w,
-                  height: 160.h,
-                  fit: BoxFit.contain,
+          child: SizedBox.expand(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 80.h,
                 ),
-                48.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'Verify phone number',
-                  style: AppTextStyles.xlBold,
-                ),
-                6.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'We have just sent a code to +12025550132.',
-                  style: AppTextStyles.mediumLight.copyWith(
-                    color: AppColors.gray500,
-                  ),
-                ),
-                40.verticalSpace,
-                Pinput(
-                  length: 6,
-                  controller: viewModel.otpController,
-                  defaultPinTheme: PinTheme(
-                    width: 56.w,
-                    height: 56.h,
-                    textStyle: AppTextStyles.xlBold.copyWith(
-                      color: AppColors.gray800,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomImageView(
+                      imagePath: AppImages.nearByIcon,
+                      width: 160.w,
+                      height: 160.h,
+                      fit: BoxFit.contain,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(
+                    48.verticalSpace,
+                    Text(
+                      textAlign: TextAlign.center,
+                      'Verify phone number',
+                      style: AppTextStyles.xlBold,
+                    ),
+                    6.verticalSpace,
+                    Text(
+                      textAlign: TextAlign.center,
+                      'We have just sent a code to +12025550132.',
+                      style: AppTextStyles.mediumLight.copyWith(
                         color: AppColors.gray500,
                       ),
                     ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    width: 56.w,
-                    height: 56.h,
-                    textStyle: AppTextStyles.xlBold.copyWith(
-                      color: AppColors.gray800,
+                    40.verticalSpace,
+                    Pinput(
+                      length: 6,
+                      controller: viewModel.otpController,
+                      defaultPinTheme: PinTheme(
+                        width: 65.w,
+                        height: 65.h,
+                        textStyle: AppTextStyles.xlBold.copyWith(
+                          color: AppColors.gray800,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.gray50,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: null,
+                        ),
+                      ),
+                      focusedPinTheme: PinTheme(
+                        width: 66.w,
+                        height: 66.h,
+                        textStyle: AppTextStyles.xlBold.copyWith(
+                          color: AppColors.gray800,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(
+                            color: AppColors.red90,
+                          ),
+                        ),
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(
+                    24.verticalSpace,
+                    CustomElevatedButton(
+                      onPressed: () {
+                        // if (viewModel.formKey.currentState!.validate()) {
+                        viewModel.onNext();
+                        // }
+                      },
+                      text: 'Next',
+                    ),
+                    16.verticalSpace,
+                    CustomElevatedButton(
+                        text: 'Send again',
+                        backgroundColor: AppColors.gray50,
+                        borderColor: Colors.transparent,
+                        textColor: AppColors.black,
+                        onPressed: () {}),
+                    16.verticalSpace,
+                    Text(
+                      'By signing up you agree to',
+                      style: AppTextStyles.xsRegular.copyWith(
+                        color: AppColors.gray500,
+                      ),
+                    ),
+                    4.verticalSpace,
+                    Text(
+                      'our terms of service and privacy policy.',
+                      style: AppTextStyles.xsRegular.copyWith(
                         color: AppColors.red90,
                       ),
                     ),
-                  ),
+                    30.verticalSpace,
+                  ],
                 ),
-                24.verticalSpace,
-                CustomElevatedButton(
-                  onPressed: () {
-                    // if (viewModel.formKey.currentState!.validate()) {
-                    viewModel.onContinue();
-                    // }
-                  },
-                  text: 'Next',
-                ),
-                CustomElevatedButton(
-                    text: 'Send again',
-                    backgroundColor: AppColors.gray500,
-                    borderColor: Colors.transparent,
-                    onPressed: () {}),
-                Text(
-                  'By signing up you agree to',
-                  style: AppTextStyles.xsRegular.copyWith(
-                    color: AppColors.gray500,
-                  ),
-                ),
-                4.verticalSpace,
-                Text(
-                  'our terms of service and privacy policy.',
-                  style: AppTextStyles.xsRegular.copyWith(
-                    color: AppColors.red90,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

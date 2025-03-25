@@ -27,4 +27,8 @@ class LoginViewModel extends BaseViewModel {
   void navigateToAddAddressView() {
     _navigationService.navigateToAddAddressView();
   }
+
+  void navigateToNavigationView() {
+    _navigationService.navigateToNavigationView();
+  }
 }

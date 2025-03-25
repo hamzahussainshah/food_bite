@@ -53,7 +53,7 @@ class CustomElevatedButton extends StatelessWidget {
           color: isDisabled
               ? AppColors.gray500
               : isBgColor
-                  ? AppColors.white
+                  ? textColor ?? AppColors.white
                   : textColor ?? AppColors.red90,
         );
 

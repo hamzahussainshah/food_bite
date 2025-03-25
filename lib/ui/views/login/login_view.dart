@@ -93,7 +93,7 @@ class LoginView extends StackedView<LoginViewModel> {
                 CustomElevatedButton(
                     text: 'Log In',
                     onPressed: () {
-                      viewModel.navigateToAddAddressView();
+                      viewModel.navigateToNavigationView();
                     }),
                 16.verticalSpace,
                 Center(

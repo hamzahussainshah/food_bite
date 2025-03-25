@@ -33,6 +33,6 @@ flutter:
   assets:
     - assets/images/
     - assets/flags/
-#    - assets/fonts/
+    - assets/icons/
 #    - assets/lottie/
 

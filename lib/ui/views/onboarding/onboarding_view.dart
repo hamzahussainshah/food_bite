@@ -62,7 +62,7 @@ class OnboardingView extends StackedView<OnboardingViewModel> {
                 count: 4,
                 effect: const ExpandingDotsEffect(
                   activeDotColor: AppColors.red90,
-                  dotColor: AppColors.gray50,
+                  dotColor: AppColors.gray200,
                   dotHeight: 8,
                   dotWidth: 8,
                   spacing: 4,

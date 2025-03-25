@@ -26,6 +26,7 @@ class MainApp extends StatelessWidget {
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           initialRoute: Routes.startupView,
           onGenerateRoute: StackedRouter().onGenerateRoute,
           navigatorKey: StackedService.navigatorKey,

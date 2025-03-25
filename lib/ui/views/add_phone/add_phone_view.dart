@@ -23,120 +23,154 @@ class AddPhoneView extends StackedView<AddPhoneViewModel> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomImageView(
-                  imagePath: AppImages.nearByIcon,
-                  width: 160.w,
-                  height: 160.h,
-                  fit: BoxFit.contain,
+          child: SizedBox.expand(
+            child: SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 48.h,
                 ),
-                48.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'Get started with Foobite',
-                  style: AppTextStyles.xlBold,
-                ),
-                6.verticalSpace,
-                Text(
-                  textAlign: TextAlign.center,
-                  'Enter your phone number',
-                  style: AppTextStyles.mediumLight.copyWith(
-                    color: AppColors.gray500,
-                  ),
-                ),
-                40.verticalSpace,
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: viewModel.isEnabled
-                          ? AppColors.red90
-                          : AppColors.gray500,
-                    ),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
+                child: Form(
+                  key: viewModel.formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      16.horizontalSpace,
-                      InkWell(
-                        onTap: viewModel.showCountrySelector,
-                        child: Row(
-                          children: [
-                            CustomImageView(
-                              imagePath: AppIcons.countryFlag(
-                                  viewModel.country['code'].toLowerCase()),
-                              height: 30.h,
-                              width: 30.w,
-                              fit: BoxFit.fill,
-                              radius: BorderRadius.circular(100.r),
-                            ),
-                            12.horizontalSpace,
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.gray500,
-                            )
-                          ],
-                        ),
+                      CustomImageView(
+                        imagePath: AppImages.nearByIcon,
+                        width: 160.w,
+                        height: 160.h,
+                        fit: BoxFit.contain,
                       ),
-                      10.horizontalSpace,
+                      48.verticalSpace,
                       Text(
-                        viewModel.country['dial_code'],
-                        style: AppTextStyles.regular.copyWith(
-                          color: AppColors.gray800,
+                        textAlign: TextAlign.center,
+                        'Get started with Foobite',
+                        style: AppTextStyles.xlBold,
+                      ),
+                      6.verticalSpace,
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Enter your phone number',
+                        style: AppTextStyles.mediumLight.copyWith(
+                          color: AppColors.gray500,
                         ),
                       ),
-                      Expanded(
-                        child: TextFormField(
-                          focusNode: viewModel.phoneFocus,
-                          cursorColor: AppColors.gray500,
-                          cursorHeight: 22.h,
-                          cursorWidth: 1.w,
-                          cursorRadius: Radius.circular(0.3.r),
-                          onTap: () {
-                            viewModel.isEnabled = true;
-                            viewModel.notifyListeners();
-                          },
-                          onTapOutside: (value) {
-                            viewModel.isEnabled = false;
-                            viewModel.notifyListeners();
-                          },
-                          controller: viewModel.phoneController,
-                          onChanged: (value) => viewModel.onPhoneChanged(),
-                          keyboardType: TextInputType.phone,
-                          style: AppTextStyles.regular.copyWith(
-                            color: AppColors.textColor,
-                          ),
-                          decoration: InputDecoration(
-                            hintText:
-                                '${viewModel.country['dial_code']} (00) 000 00 00',
-                            hintStyle: AppTextStyles.regular.copyWith(
-                              color: const Color(0xFFA1A1AA),
+                      40.verticalSpace,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: viewModel.isEnabled
+                                    ? AppColors.red90
+                                    : AppColors.gray500,
+                              ),
+                              borderRadius: BorderRadius.circular(8.r),
                             ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 12.h,
-                              horizontal: 10.w,
+                            child: Row(
+                              children: [
+                                16.horizontalSpace,
+                                InkWell(
+                                  onTap: viewModel.showCountrySelector,
+                                  child: Row(
+                                    children: [
+                                      CustomImageView(
+                                        imagePath: AppIcons.countryFlag(
+                                            viewModel.country['code']
+                                                .toLowerCase()),
+                                        height: 30.h,
+                                        width: 30.w,
+                                        fit: BoxFit.fill,
+                                        radius: BorderRadius.circular(100.r),
+                                      ),
+                                      12.horizontalSpace,
+                                      Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: AppColors.gray500,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                10.horizontalSpace,
+                                Text(
+                                  viewModel.country['dial_code'],
+                                  style: AppTextStyles.regular.copyWith(
+                                    color: AppColors.gray800,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    focusNode: viewModel.phoneFocus,
+                                    cursorColor: AppColors.gray500,
+                                    cursorHeight: 22.h,
+                                    cursorWidth: 1.w,
+                                    cursorRadius: Radius.circular(0.3.r),
+                                    onTap: () {
+                                      viewModel.isEnabled = true;
+                                      viewModel.notifyListeners();
+                                    },
+                                    onTapOutside: (value) {
+                                      viewModel.isEnabled = false;
+                                      viewModel.notifyListeners();
+                                    },
+                                    controller: viewModel.phoneController,
+                                    onChanged: (value) {
+                                      viewModel.onPhoneChanged();
+                                      viewModel.validatePhoneNumber();
+                                    },
+                                    keyboardType: TextInputType.phone,
+                                    style: AppTextStyles.regular.copyWith(
+                                      color: AppColors.textColor,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          '${viewModel.country['dial_code']} (00) 000 00 00',
+                                      hintStyle: AppTextStyles.regular.copyWith(
+                                        color: const Color(0xFFA1A1AA),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: 12.h,
+                                        horizontal: 10.w,
+                                      ),
+                                      border: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      focusedErrorBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            border: InputBorder.none,
                           ),
-                        ),
+                          if (viewModel.errorMessage != null)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.h, left: 16.w),
+                              child: Text(
+                                viewModel.errorMessage!,
+                                style: TextStyle(
+                                  color: AppColors.red90,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      24.verticalSpace,
+                      CustomElevatedButton(
+                        onPressed: () {
+                          viewModel.validatePhoneNumber();
+                          if (viewModel.formKey.currentState!.validate()) {
+                            viewModel.onNext();
+                          }
+                        },
+                        text: 'Next',
                       ),
                     ],
                   ),
                 ),
-                24.verticalSpace,
-                CustomElevatedButton(
-                  onPressed: viewModel.isEnabled
-                      ? () {
-                          if (viewModel.formKey.currentState!.validate()) {
-                            viewModel.onContinue();
-                          }
-                        }
-                      : null,
-                  text: 'Next',
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -145,8 +179,6 @@ class AddPhoneView extends StackedView<AddPhoneViewModel> {
   }
 
   @override
-  AddPhoneViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
+  AddPhoneViewModel viewModelBuilder(BuildContext context) =>
       AddPhoneViewModel();
 }
