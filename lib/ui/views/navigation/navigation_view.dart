@@ -165,7 +165,7 @@ class NavigationView extends StackedView<NavigationViewModel> {
 
   @override
   void onViewModelReady(NavigationViewModel viewModel) {
-    viewModel.setIndex(1);
+    viewModel.setIndex(0);
     viewModel.notifyListeners();
     super.onViewModelReady(viewModel);
   }

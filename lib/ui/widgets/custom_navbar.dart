@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_bite/ui/common/app_colors.dart';
 
-class CustomNavbar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackPressed;
   final TextStyle? titleStyle;
@@ -13,7 +13,7 @@ class CustomNavbar extends StatelessWidget implements PreferredSizeWidget {
   final double? elevation;
   final BorderRadius? borderRadius;
 
-  const CustomNavbar({
+  const CustomAppBar({
     super.key,
     required this.title,
     this.onBackPressed,

@@ -21,7 +21,7 @@ class MenuView extends StackedView<MenuViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-      appBar: CustomNavbar(
+      appBar: CustomAppBar(
         title: 'Menu',
         onBackPressed: () {
           viewModel.navigateBack();

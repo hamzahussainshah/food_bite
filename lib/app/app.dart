@@ -26,6 +26,24 @@ import 'package:food_bite/ui/views/track/track_view.dart';
 import 'package:food_bite/ui/views/history/history_view.dart';
 import 'package:food_bite/ui/views/item_details/item_details_view.dart';
 import 'package:food_bite/ui/views/checkout/checkout_view.dart';
+import 'package:food_bite/ui/views/add_payment/add_payment_view.dart';
+import 'package:food_bite/ui/views/confirmation/confirmation_view.dart';
+import 'package:food_bite/ui/views/order_details/order_details_view.dart';
+import 'package:food_bite/ui/views/rate_driver/rate_driver_view.dart';
+import 'package:food_bite/ui/views/rate_your_food/rate_your_food_view.dart';
+import 'package:food_bite/services/file_picker_service.dart';
+import 'package:food_bite/services/local_storage_service.dart';
+import 'package:food_bite/ui/bottom_sheets/select_photo/select_photo_sheet.dart';
+import 'package:food_bite/ui/views/confirm_feedback/confirm_feedback_view.dart';
+import 'package:food_bite/ui/views/account_information/account_information_view.dart';
+import 'package:food_bite/ui/views/change_password/change_password_view.dart';
+import 'package:food_bite/ui/views/delivery_locations/delivery_locations_view.dart';
+import 'package:food_bite/ui/views/payment_methods/payment_methods_view.dart';
+import 'package:food_bite/ui/views/payment_cards/payment_cards_view.dart';
+import 'package:food_bite/ui/views/add_card/add_card_view.dart';
+import 'package:food_bite/services/api_service.dart';
+import 'package:food_bite/services/auth_service.dart';
+import 'package:food_bite/services/database_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -51,6 +69,18 @@ import 'package:food_bite/ui/views/checkout/checkout_view.dart';
     MaterialRoute(page: HistoryView),
     MaterialRoute(page: ItemDetailsView),
     MaterialRoute(page: CheckoutView),
+    MaterialRoute(page: AddPaymentView),
+    MaterialRoute(page: ConfirmationView),
+    MaterialRoute(page: OrderDetailsView),
+    MaterialRoute(page: RateDriverView),
+    MaterialRoute(page: RateYourFoodView),
+    MaterialRoute(page: ConfirmFeedbackView),
+    MaterialRoute(page: AccountInformationView),
+    MaterialRoute(page: ChangePasswordView),
+    MaterialRoute(page: DeliveryLocationsView),
+    MaterialRoute(page: PaymentMethodsView),
+    MaterialRoute(page: PaymentCardsView),
+    MaterialRoute(page: AddCardView),
 // @stacked-route
   ],
   dependencies: [
@@ -59,11 +89,16 @@ import 'package:food_bite/ui/views/checkout/checkout_view.dart';
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: AppStatesService),
     LazySingleton(classType: LocalStorageService),
+    LazySingleton(classType: FilePickerService),
+    LazySingleton(classType: ApiService),
+    LazySingleton(classType: AuthService),
+    LazySingleton(classType: DatabaseService),
 // @stacked-service
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
     StackedBottomsheet(classType: SelectCountryCodeSheet),
+    StackedBottomsheet(classType: SelectPhotoSheet),
 // @stacked-bottom-sheet
   ],
   dialogs: [

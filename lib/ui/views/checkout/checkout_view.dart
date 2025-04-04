@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_bite/ui/common/app_colors.dart';
+import 'package:food_bite/ui/common/assets.dart';
 import 'package:food_bite/ui/common/text_styles.dart';
+import 'package:food_bite/ui/widgets/custom_elevated_button.dart';
+import 'package:food_bite/ui/widgets/custom_image_widget.dart';
+import 'package:food_bite/ui/widgets/custom_text_field.dart';
 import 'package:stacked/stacked.dart';
 import 'checkout_viewmodel.dart';
 
@@ -10,12 +14,12 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
 
   @override
   Widget builder(
-      BuildContext context,
-      CheckoutViewModel viewModel,
-      Widget? child,
-      ) {
+    BuildContext context,
+    CheckoutViewModel viewModel,
+    Widget? child,
+  ) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, size: 24.sp),
@@ -44,21 +48,22 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
                   decoration: BoxDecoration(
                     color: AppColors.gray50,
                     borderRadius: BorderRadius.circular(12.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.red60.withValues(alpha: 0.3),
+                        blurRadius: 8.r,
+                        spreadRadius: 0.r,
+                        offset: Offset(0, 18.h),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        width: 60.w,
-                        height: 60.h,
-                        decoration: BoxDecoration(
-                          color: AppColors.gray200,
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: Icon(
-                          Icons.location_on,
-                          color: AppColors.red90,
-                          size: 30.sp,
-                        ),
+                      CustomImageView(
+                        imagePath: AppImages.maps,
+                        height: 65.h,
+                        width: 65.w,
+                        radius: BorderRadius.circular(12.r),
                       ),
                       16.horizontalSpace,
                       Expanded(
@@ -70,11 +75,21 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
                               style: AppTextStyles.xsRegular,
                             ),
                             4.verticalSpace,
-                            Text(
-                              "📍 ${viewModel.addresses[0]["distance"]}",
-                              style: AppTextStyles.xsRegular.copyWith(
-                                color: AppColors.gray500,
-                              ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  size: 24.sp,
+                                  color: AppColors.gray500,
+                                ),
+                                4.horizontalSpace,
+                                Text(
+                                  "${viewModel.addresses[0]["distance"]}",
+                                  style: AppTextStyles.xsRegular.copyWith(
+                                    color: AppColors.gray500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -90,36 +105,46 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
                 style: AppTextStyles.lSemibold,
               ),
               16.verticalSpace,
-              _buildTextField(
-                hint: "Full Name",
-                onChanged: (value) => viewModel.updateFormField("fullName", value),
+              CustomTextField(
+                hintText: "Full Name",
+                onChanged: (value) =>
+                    viewModel.updateFormField("fullName", value),
+                controller: viewModel.nameController,
               ),
               16.verticalSpace,
-              _buildTextField(
-                hint: "Phone Number",
-                onChanged: (value) => viewModel.updateFormField("phoneNumber", value),
+              CustomTextField(
+                hintText: "Phone Number",
+                onChanged: (value) =>
+                    viewModel.updateFormField("phoneNumber", value),
                 keyboardType: TextInputType.phone,
+                controller: viewModel.phoneController,
               ),
               16.verticalSpace,
-              _buildTextField(
-                hint: "Delivery Address",
-                onChanged: (value) => viewModel.updateFormField("deliveryAddress", value),
+              CustomTextField(
+                hintText: "Delivery Address",
+                onChanged: (value) =>
+                    viewModel.updateFormField("deliveryAddress", value),
+                controller: viewModel.addressController,
               ),
               16.verticalSpace,
               Row(
                 children: [
                   Expanded(
-                    child: _buildTextField(
-                      hint: "Pincode",
-                      onChanged: (value) => viewModel.updateFormField("pincode", value),
+                    child: CustomTextField(
+                      hintText: "Pincode",
+                      onChanged: (value) =>
+                          viewModel.updateFormField("pincode", value),
                       keyboardType: TextInputType.number,
+                      controller: viewModel.pinCodeController,
                     ),
                   ),
                   16.horizontalSpace,
                   Expanded(
-                    child: _buildTextField(
-                      hint: "City & State",
-                      onChanged: (value) => viewModel.updateFormField("cityAndState", value),
+                    child: CustomTextField(
+                      hintText: "City & State",
+                      onChanged: (value) =>
+                          viewModel.updateFormField("cityAndState", value),
+                      controller: viewModel.cityController,
                     ),
                   ),
                 ],
@@ -138,35 +163,26 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
                 int index = entry.key;
                 Map<String, dynamic> option = entry.value;
                 return _buildPaymentOption(
+                  index: index,
                   icon: option["icon"],
                   name: option["name"],
                   isSelected: option["isSelected"],
+                  isAdd: option["isAdd"],
                   onTap: () => viewModel.selectPaymentOption(index),
+                  onAddTap: () {
+                    viewModel.navigateToAddPaymentView();
+                  },
+                  viewModel: viewModel,
                 );
               }).toList(),
               32.verticalSpace,
 
               // Place Order Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    viewModel.placeOrder();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.red90,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                  ),
-                  child: Text(
-                    "Place Order",
-                    style: AppTextStyles.mSemibold.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              CustomElevatedButton(
+                text: "Place Order",
+                onPressed: () {
+                  viewModel.placeOrder();
+                },
               ),
               20.verticalSpace, // Bottom padding
             ],
@@ -176,94 +192,76 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
     );
   }
 
-  // Helper method to build text field
-  Widget _buildTextField({
-    required String hint,
-    required Function(String) onChanged,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: AppTextStyles.xsRegular.copyWith(
-          color: AppColors.gray500,
-        ),
-        filled: true,
-        fillColor: AppColors.gray50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 16.w,
-          vertical: 14.h,
-        ),
-      ),
-      style: AppTextStyles.xsRegular,
-      keyboardType: keyboardType,
-      onChanged: onChanged,
-    );
-  }
-
   // Helper method to build payment option
   Widget _buildPaymentOption({
+    required bool isAdd,
+    required int index,
     required IconData icon,
     required String name,
     required bool isSelected,
     required VoidCallback onTap,
+    required VoidCallback onAddTap,
+    required CheckoutViewModel viewModel,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 16.h),
-        child: Container(
-          padding: EdgeInsets.all(16.r),
-          decoration: BoxDecoration(
-            color: AppColors.gray50,
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: AppColors.headingColor,
-                size: 24.sp,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h),
+      child: Container(
+        padding: EdgeInsets.all(16.r),
+        decoration: BoxDecoration(
+          color: AppColors.red10,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: AppColors.headingColor,
+              size: 24.sp,
+            ),
+            16.horizontalSpace,
+            Expanded(
+              child: Text(
+                name,
+                style: AppTextStyles.mRegular,
               ),
-              16.horizontalSpace,
-              Expanded(
+            ),
+            if (isAdd)
+              GestureDetector(
+                onTap: onAddTap,
                 child: Text(
-                  name,
-                  style: AppTextStyles.mRegular,
-                ),
-              ),
-              if (isSelected)
-                Container(
-                  width: 24.w,
-                  height: 24.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.red90,
-                  ),
-                  child: Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 16.sp,
-                  ),
-                )
-              else
-                Text(
                   "Add",
                   style: AppTextStyles.xsRegular.copyWith(
                     color: AppColors.red90,
                   ),
                 ),
-            ],
-          ),
+              ),
+            16.horizontalSpace,
+            if (name == "Credit/Debit Card")
+              Radio<int>(
+                value: index,
+                groupValue: viewModel.selectedPaymentOptionIndex,
+                onChanged: (value) {
+                  if (value != null) {
+                    onTap();
+                  }
+                },
+                activeColor: AppColors.red90,
+                fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return AppColors.red90;
+                  }
+                  return AppColors.gray500;
+                }),
+              )
+            else
+              const SizedBox.shrink(),
+          ],
         ),
       ),
     );
   }
 
   @override
-  CheckoutViewModel viewModelBuilder(BuildContext context) => CheckoutViewModel();
+  CheckoutViewModel viewModelBuilder(BuildContext context) =>
+      CheckoutViewModel();
 }

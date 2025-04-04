@@ -35,6 +35,15 @@ class AppImages {
   static const String person = "$imagesPath/person.png";
   static const String burger1 = "$imagesPath/burger1.png";
   static const String burger2 = "$imagesPath/burger2.png";
+  static const String maps = "$imagesPath/map.png";
+  static const String backgroundConfirmation =
+      "$imagesPath/background_confirmation.png";
+  static const String splashScreen = "$imagesPath/splash_screen.png";
+  static const String mapLocation = "$imagesPath/map_location.png";
+  static const String takeawayBag = "$imagesPath/takaway_bag.png";
+  static const String visa = "$imagesPath/visa.png";
+  static const String paypal = "$imagesPath/paypal.png";
+  static const String master = "$imagesPath/master.png";
 }
 
 class AppIcons {

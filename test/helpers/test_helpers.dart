@@ -4,6 +4,11 @@ import 'package:food_bite/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:food_bite/services/app_states_service.dart';
 import 'package:food_bite/services/local_storage_service.dart';
+import 'package:food_bite/services/file_picker_service.dart';
+import 'package:food_bite/services/local_storage_service.dart';
+import 'package:food_bite/services/api_service.dart';
+import 'package:food_bite/services/auth_service.dart';
+import 'package:food_bite/services/database_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -14,6 +19,11 @@ import 'test_helpers.mocks.dart';
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<AppStatesService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<LocalStorageService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FilePickerService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<LocalStorageService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<ApiService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<AuthService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<DatabaseService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -22,6 +32,11 @@ void registerServices() {
   getAndRegisterDialogService();
   getAndRegisterAppStatesService();
   getAndRegisterLocalStorageService();
+  getAndRegisterFilePickerService();
+  getAndRegisterLocalStorageService();
+  getAndRegisterApiService();
+  getAndRegisterAuthService();
+  getAndRegisterDatabaseService();
 // @stacked-mock-register
 }
 
@@ -86,6 +101,41 @@ MockLocalStorageService getAndRegisterLocalStorageService() {
   _removeRegistrationIfExists<LocalStorageService>();
   final service = MockLocalStorageService();
   locator.registerSingleton<LocalStorageService>(service);
+  return service;
+}
+
+MockFilePickerService getAndRegisterFilePickerService() {
+  _removeRegistrationIfExists<FilePickerService>();
+  final service = MockFilePickerService();
+  locator.registerSingleton<FilePickerService>(service);
+  return service;
+}
+
+MockLocalStorageService getAndRegisterLocalStorageService() {
+  _removeRegistrationIfExists<LocalStorageService>();
+  final service = MockLocalStorageService();
+  locator.registerSingleton<LocalStorageService>(service);
+  return service;
+}
+
+MockApiService getAndRegisterApiService() {
+  _removeRegistrationIfExists<ApiService>();
+  final service = MockApiService();
+  locator.registerSingleton<ApiService>(service);
+  return service;
+}
+
+MockAuthService getAndRegisterAuthService() {
+  _removeRegistrationIfExists<AuthService>();
+  final service = MockAuthService();
+  locator.registerSingleton<AuthService>(service);
+  return service;
+}
+
+MockDatabaseService getAndRegisterDatabaseService() {
+  _removeRegistrationIfExists<DatabaseService>();
+  final service = MockDatabaseService();
+  locator.registerSingleton<DatabaseService>(service);
   return service;
 }
 // @stacked-mock-create

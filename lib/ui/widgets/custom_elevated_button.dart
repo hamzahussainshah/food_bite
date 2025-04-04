@@ -60,21 +60,32 @@ class CustomElevatedButton extends StatelessWidget {
     // Use the original minimumSize or default to full width and 50.h height
     final effectiveMinimumSize = minimumSize ?? Size(double.infinity, 50.h);
 
+    // Define the border radius
+    final borderRadius = BorderRadius.circular(15.r);
+
     return SizedBox(
       width: effectiveMinimumSize.width,
       height: effectiveMinimumSize.height,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: buttonColor,
-          gradient: buttonGradient,
-          borderRadius: BorderRadius.circular(15.r),
-          border: isDisabled
-              ? null
-              : Border.all(color: borderColor ?? Colors.transparent),
-        ),
-        child: InkWell(
-          onTap: isDisabled ? null : onPressed,
-          borderRadius: BorderRadius.circular(100.r),
+      child: GestureDetector(
+        onTap: isDisabled ? null : onPressed,
+        child: Container(
+          decoration: BoxDecoration(
+            color: buttonColor,
+            gradient: buttonGradient,
+            borderRadius: borderRadius,
+            border: isDisabled
+                ? null
+                : Border.all(color: borderColor ?? Colors.transparent),
+            boxShadow: elevation != null
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: elevation!,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
+          ),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
