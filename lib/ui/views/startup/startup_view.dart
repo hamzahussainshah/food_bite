@@ -20,38 +20,45 @@ class StartupView extends StackedView<StartupViewModel> {
   ) {
     return Scaffold(
       backgroundColor: Colors.white, // Ensures the background is white
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Align(
-            //   alignment: Alignment.topRight,
-            //   child: CustomImageView(
-            //     imagePath: AppImages.blurEffect1st,
-            //     // height: 120.h,
-            //   ),
-            // ),
-            CustomImageView(
-              imagePath: AppImages.foodBiteLogo,
-              height: 60.h,
-            ),
-            // Align(
-            //   alignment: Alignment.centerLeft,
-            //   child: CustomImageView(
-            //     imagePath: AppImages.blurEffect2nd,
-            //     // height: 120.h,
-            //   ),
-            // ),
-            // Align(
-            //   alignment: Alignment.bottomRight,
-            //   child: CustomImageView(
-            //     imagePath: AppImages.blurEffect3rd,
-            //     // height: 120.h,
-            //   ),
-            // ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage(AppImages.splashScreen),
+          fit: BoxFit.cover,
+        )),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: CustomImageView(
+              //     imagePath: AppImages.blurEffect1st,
+              //     // height: 120.h,
+              //   ),
+              // ),
+              CustomImageView(
+                imagePath: AppImages.foodBiteLogo,
+                height: 60.h,
+              ),
+              // Align(
+              //   alignment: Alignment.centerLeft,
+              //   child: CustomImageView(
+              //     imagePath: AppImages.blurEffect2nd,
+              //     // height: 120.h,
+              //   ),
+              // ),
+              // Align(
+              //   alignment: Alignment.bottomRight,
+              //   child: CustomImageView(
+              //     imagePath: AppImages.blurEffect3rd,
+              //     // height: 120.h,
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );

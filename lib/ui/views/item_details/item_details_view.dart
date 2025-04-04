@@ -20,7 +20,7 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
   ) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: CustomNavbar(
+      appBar: CustomAppBar(
         title: "Item Details",
         onBackPressed: () {
           viewModel.navigateBack();

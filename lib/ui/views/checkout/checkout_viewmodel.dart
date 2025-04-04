@@ -3,7 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
-
+import '../../../ui/views/add_payment/add_payment_view.dart'; // Assuming AddPaymentView is the renamed PaymentMethodsView
 
 class CheckoutViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -18,9 +18,24 @@ class CheckoutViewModel extends BaseViewModel {
 
   // Sample payment options
   List<Map<String, dynamic>> paymentOptions = [
-    {"name": "Credit/Debit Card", "icon": Icons.credit_card, "isSelected": true},
-    {"name": "Cash on Delivery", "icon": Icons.money, "isSelected": false},
-    {"name": "Wallet", "icon": Icons.account_balance_wallet, "isSelected": false},
+    {
+      "name": "Credit/Debit Card",
+      "icon": Icons.credit_card,
+      "isSelected": true,
+      "isAdd": false,
+    },
+    {
+      "name": "Cash on Delivery",
+      "icon": Icons.money,
+      "isSelected": false,
+      "isAdd": true,
+    },
+    {
+      "name": "Wallet",
+      "icon": Icons.account_balance_wallet,
+      "isSelected": false,
+      "isAdd": true,
+    },
   ];
 
   // Form data
@@ -32,6 +47,12 @@ class CheckoutViewModel extends BaseViewModel {
 
   // Selected payment option index
   int selectedPaymentOptionIndex = 0;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController pinCodeController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
 
   void selectPaymentOption(int index) {
     for (int i = 0; i < paymentOptions.length; i++) {
@@ -70,10 +91,26 @@ class CheckoutViewModel extends BaseViewModel {
     print("Delivery Address: $deliveryAddress");
     print("Pincode: $pincode");
     print("City & State: $cityAndState");
-    print("Payment Option: ${paymentOptions[selectedPaymentOptionIndex]["name"]}");
+    print(
+        "Payment Option: ${paymentOptions[selectedPaymentOptionIndex]["name"]}");
   }
 
   void navigateBack() {
     _navigationService.back();
+  }
+
+  void navigateToAddPaymentView() {
+    _navigationService.navigateToView(const AddPaymentView());
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to prevent memory leaks
+    nameController.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+    pinCodeController.dispose();
+    cityController.dispose();
+    super.dispose();
   }
 }
