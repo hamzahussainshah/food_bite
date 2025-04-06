@@ -17,6 +17,8 @@ class SignupViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+
+
   void navigateToLoginView() {
     _navigationService.navigateToLoginView();
   }

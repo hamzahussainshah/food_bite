@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../data_service/body/login_body.dart';
 import '../../../services/auth_service.dart';
+import '../../widgets/snackbar.dart';
 
 class LoginViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
