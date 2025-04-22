@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import '../data_service/data_model/menu_model.dart';
 import '../ui/widgets/custom_logger/custom_logger.dart';
 
 class LocalStorageService {
@@ -11,6 +12,7 @@ class LocalStorageService {
   static const String isLogedInKey = 'isLoggedIn';
   static const String nameUser = 'userName';
   static const String emailKey = 'email';
+  static const String cartItemsKey = 'cartItems';
 
   late File _localFile;
   Map<String, dynamic> _data = {};
@@ -41,6 +43,90 @@ class LocalStorageService {
       await resetStorage();
     }
   }
+  Future<void> removeFromCart(String itemId) async {
+    try {
+      if (_data.containsKey(cartItemsKey)) {
+        List<dynamic> rawList = jsonDecode(_data[cartItemsKey]);
+        List<Map<String, dynamic>> updatedCart =
+        List<Map<String, dynamic>>.from(rawList)
+          ..removeWhere((item) => item['item']['_id'] == itemId);
+
+        _data[cartItemsKey] = jsonEncode(updatedCart);
+        await _writeToFile();
+
+        log.d("Item removed from cart: $itemId");
+      }
+    } catch (e) {
+      log.d("Failed to remove item from cart: $e");
+    }
+  }
+
+
+  List<Map<String, dynamic>> getCartItemsRaw() {
+    try {
+      if (_data.containsKey(cartItemsKey)) {
+        return List<Map<String, dynamic>>.from(jsonDecode(_data[cartItemsKey]));
+      }
+    } catch (e) {
+      log.d("Failed to read cart items: $e");
+    }
+    return [];
+  }
+
+  /// Adds an item to the cart. Returns true if new item added, false if already exists.
+  Future<bool> addToCart(MenuItem item, {int quantity = 1}) async {
+    try {
+      List<Map<String, dynamic>> cart = [];
+
+      if (_data.containsKey(cartItemsKey)) {
+        cart = List<Map<String, dynamic>>.from(jsonDecode(_data[cartItemsKey]));
+      }
+
+      final index = cart.indexWhere((e) => e['item']['_id'] == item.id);
+      if (index != -1) {
+        // Already exists - do not modify
+        log.d("Item already in cart: ${item.name}");
+        return false;
+      } else {
+        cart.add({
+          "item": item.toJson(),
+          "quantity": quantity,
+        });
+
+        _data[cartItemsKey] = jsonEncode(cart);
+        await _writeToFile();
+        log.d("Item added to cart: ${item.name} with quantity: $quantity");
+        return true;
+      }
+    } catch (e) {
+      log.d("Failed to add item to cart: $e");
+      return false;
+    }
+  }
+
+  List<MenuItem> getCartItems() {
+    try {
+      if (_data.containsKey(cartItemsKey)) {
+        List<dynamic> rawList = jsonDecode(_data[cartItemsKey]);
+        return rawList.map((e) => MenuItem.fromJson(e)).toList();
+      }
+    } catch (e) {
+      log.d("Failed to read cart items: $e");
+    }
+    return [];
+  }
+
+  Future<void> updateCartItems(List<Map<String, dynamic>> items) async {
+    try {
+      _data[cartItemsKey] = jsonEncode(items);
+      await _writeToFile();
+      log.d("Cart updated with ${items.length} items");
+    } catch (e) {
+      log.d("Failed to update cart items: $e");
+    }
+  }
+
+
 
   /// **Resets the storage file completely**
   Future<void> resetStorage() async {

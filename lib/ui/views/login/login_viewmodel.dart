@@ -11,9 +11,15 @@ import '../../widgets/snackbar.dart';
 class LoginViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  LoginViewModel() {
+    emailController.text = "hamza@gmail.com";
+    passwordController.text = "12345678";
+  }
   bool isObscure = true;
   togglePasswordVisibility() {
     isObscure = !isObscure;
@@ -25,7 +31,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void navigateToForgotPasswordView() {
-    _navigationService.navigateToAddPhoneView();
+    _navigationService.navigateToAddEmailView();
   }
 
   void navigateToAddAddressView() {
@@ -35,13 +41,12 @@ class LoginViewModel extends BaseViewModel {
   void navigateToNavigationView() {
     _navigationService.navigateToNavigationView();
   }
+
   Future<void> signInWithPhoneAndPassword() async {
     setBusy(true);
-
     LoginBody loginBody = LoginBody(
       email: emailController.text,
       password: passwordController.text,
-      // fcm: _notificationsService.fcmtoken,
     );
     final response = await _authService.signInWithPhoneAndPassword(loginBody);
 
@@ -54,6 +59,4 @@ class LoginViewModel extends BaseViewModel {
       notifyListeners();
     }
   }
-
-
 }

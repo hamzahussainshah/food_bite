@@ -24,4 +24,3 @@ Future<void> showSuccessSnackBar(String title, String message) async {
   );
   await Future.delayed(5.milliseconds);
 }
-

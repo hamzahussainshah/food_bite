@@ -54,14 +54,17 @@ class CartView extends StackedView<CartViewModel> {
                 Column(
                   children: viewModel.cartItems.asMap().entries.map((entry) {
                     int index = entry.key;
-                    Map<String, dynamic> item = entry.value;
+                    final item = entry.value;
+                    final quantity = viewModel.quantityMap[item.id] ?? 1;
+
                     return _buildCartItem(
                       index: index,
-                      imagePath: item["imagePath"],
-                      name: item["name"],
-                      addOns: item["addOns"],
-                      price: item["price"],
-                      quantity: item["quantity"],
+                      imagePath:
+                          item.images.isNotEmpty ? item.images.first : "",
+                      name: item.name,
+                      addOns: item.ingredients.join(", "),
+                      price: item.price.toDouble(),
+                      quantity: quantity,
                       onIncrease: () => viewModel.increaseQuantity(index),
                       onDecrease: () => viewModel.decreaseQuantity(index),
                       onRemove: () => viewModel.removeItem(index),
@@ -179,7 +182,7 @@ class CartView extends StackedView<CartViewModel> {
         child: Row(
           children: [
             CustomImageView(
-              imagePath: imagePath,
+              url: imagePath,
               width: 60.w,
               height: 60.h,
               fit: BoxFit.cover,

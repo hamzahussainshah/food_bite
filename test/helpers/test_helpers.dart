@@ -9,6 +9,7 @@ import 'package:food_bite/services/local_storage_service.dart';
 import 'package:food_bite/services/api_service.dart';
 import 'package:food_bite/services/auth_service.dart';
 import 'package:food_bite/services/database_service.dart';
+import 'package:food_bite/services/database_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -24,6 +25,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<ApiService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<AuthService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DatabaseService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<DatabaseService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -36,6 +38,7 @@ void registerServices() {
   getAndRegisterLocalStorageService();
   getAndRegisterApiService();
   getAndRegisterAuthService();
+  getAndRegisterDatabaseService();
   getAndRegisterDatabaseService();
 // @stacked-mock-register
 }
@@ -129,6 +132,13 @@ MockAuthService getAndRegisterAuthService() {
   _removeRegistrationIfExists<AuthService>();
   final service = MockAuthService();
   locator.registerSingleton<AuthService>(service);
+  return service;
+}
+
+MockDatabaseService getAndRegisterDatabaseService() {
+  _removeRegistrationIfExists<DatabaseService>();
+  final service = MockDatabaseService();
+  locator.registerSingleton<DatabaseService>(service);
   return service;
 }
 

@@ -10,8 +10,8 @@ class LoginBody {
   });
 
   toJson() => {
-    'email': email,
-    'password': password,
-    // 'fcm': fcm,
-  };
+        'email': email,
+        'password': password,
+        // 'fcm': fcm,
+      };
 }

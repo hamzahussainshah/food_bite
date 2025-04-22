@@ -13,7 +13,6 @@ class BestSellerItemCard extends StatelessWidget {
   final String imagePath;
   final VoidCallback onAdd;
   final VoidCallback? onTap;
-
   // Optional parameters for customization
   final double? width;
   final double? imageHeight;
@@ -31,6 +30,7 @@ class BestSellerItemCard extends StatelessWidget {
   final double? buttonHeight;
   final BorderRadius? borderRadius;
   final List<BoxShadow>? boxShadow;
+  final bool? isUrl;
 
   const BestSellerItemCard({
     Key? key,
@@ -57,6 +57,7 @@ class BestSellerItemCard extends StatelessWidget {
     this.borderRadius,
     this.boxShadow,
     this.onTap,
+    this.isUrl = false,
   }) : super(key: key);
 
   @override
@@ -108,10 +109,12 @@ class BestSellerItemCard extends StatelessWidget {
             // Image
             Center(
               child: CustomImageView(
-                imagePath: imagePath,
-                height: imageHeight ?? 80.h, // Default image height
-                width: imageWidth ?? 80.w, // Default image width
+                imagePath: isUrl! ? null : imagePath,
+                url: isUrl! ? imagePath : null,
+                height: imageHeight ?? 80.h,
+                width: imageWidth ?? 100.w,
                 fit: BoxFit.cover,
+                radius: BorderRadius.circular(10.r),
               ),
             ),
             8.verticalSpace,

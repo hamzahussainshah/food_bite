@@ -44,6 +44,10 @@ import 'package:food_bite/ui/views/add_card/add_card_view.dart';
 import 'package:food_bite/services/api_service.dart';
 import 'package:food_bite/services/auth_service.dart';
 import 'package:food_bite/services/database_service.dart';
+
+import '../core/config/config.dart';
+import 'package:food_bite/services/database_service.dart';
+import 'package:food_bite/ui/dialogs/alert/alert_dialog.dart';
 // @stacked-import
 
 @StackedApp(
@@ -93,6 +97,7 @@ import 'package:food_bite/services/database_service.dart';
     LazySingleton(classType: ApiService),
     LazySingleton(classType: AuthService),
     LazySingleton(classType: DatabaseService),
+    LazySingleton(classType: Config),
 // @stacked-service
   ],
   bottomsheets: [
@@ -103,7 +108,8 @@ import 'package:food_bite/services/database_service.dart';
   ],
   dialogs: [
     StackedDialog(classType: InfoAlertDialog),
-    // @stacked-dialog
+    StackedDialog(classType: AlertDialog),
+// @stacked-dialog
   ],
 )
 class App {}

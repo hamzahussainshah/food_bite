@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_bite/ui/common/text_styles.dart';
 import 'package:food_bite/ui/widgets/custom_image_widget.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:food_bite/ui/common/app_colors.dart';
@@ -371,33 +372,28 @@ class HomeView extends StackedView<HomeViewModel> {
                 ),
                 20.verticalSpace,
                 // Add Best Seller Item Cards
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      viewModel.bestSellerItems.length,
-                      (index) => Padding(
-                        padding: EdgeInsets.only(right: 10.w),
-                        child: BestSellerItemCard(
-                          name: viewModel.bestSellerItems[index]["name"],
-                          description: viewModel.bestSellerItems[index]
-                              ["description"],
-                          price: viewModel.bestSellerItems[index]["price"],
-                          rating: viewModel.bestSellerItems[index]["rating"],
-                          imagePath: viewModel.bestSellerItems[index]
-                              ["imagePath"],
-                          onAdd: () {
-                            viewModel.addToCart(
-                                viewModel.bestSellerItems[index]["name"]);
-                          },
-                          onTap: () {
-                            viewModel.navigateToDetailsView();
-                            // viewModel.bestSellerItems[index]["name"]);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 16.w,
+                  mainAxisSpacing: 16.h,
+                  childAspectRatio: 0.63,
+                  children: viewModel.menuItems.map((item) {
+                    return BestSellerItemCard(
+                      name: item.name.capitalize!,
+                      description: item.description,
+                      price: item.price.toDouble(),
+                      isUrl: true,
+                      rating: 4.0, // Optional: add rating in model if needed
+                      imagePath: item.images.isNotEmpty
+                          ? item.images.first
+                          : AppImages.burger,
+                      onAdd: () {
+                        viewModel.addItemToCart(item);
+                      },
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -450,6 +446,12 @@ class HomeView extends StackedView<HomeViewModel> {
         ],
       ),
     );
+  }
+
+  @override
+  void onViewModelReady(HomeViewModel viewModel) {
+    viewModel.fetchMenu();
+    super.onViewModelReady(viewModel);
   }
 
   @override

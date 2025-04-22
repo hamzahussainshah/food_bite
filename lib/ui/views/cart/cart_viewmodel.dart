@@ -1,71 +1,83 @@
 import 'package:flutter/cupertino.dart';
 import 'package:food_bite/app/app.router.dart';
-import 'package:food_bite/ui/common/assets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../data_service/data_model/menu_model.dart';
+import '../../../services/local_storage_service.dart';
 
 class CartViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
+  final LocalStorageService _storageService = locator<LocalStorageService>();
 
-  List<Map<String, dynamic>> cartItems = [
-    {
-      "name": "Margherita Pizza",
-      "addOns": "Mozzarella, Pepperoni",
-      "price": 12.99,
-      "quantity": 1,
-      "imagePath": AppImages.burger,
-    },
-    {
-      "name": "Margherita Pizza",
-      "addOns": "Mozzarella, Pepperoni",
-      "price": 12.99,
-      "quantity": 1,
-      "imagePath": AppImages.burger,
-    },
-  ];
+  List<MenuItem> cartItems = [];
+  Map<String, int> quantityMap = {};
 
-  // Charges
+  CartViewModel() {
+    final rawItems = _storageService.getCartItemsRaw();
+
+    cartItems =
+        rawItems.map((entry) => MenuItem.fromJson(entry['item'])).toList();
+    quantityMap = {
+      for (var entry in rawItems)
+        entry['item']['_id']: entry['quantity'] as int,
+    };
+  }
+
   double deliveryCharge = 5.30;
   double tax = 1.00;
 
-  // Calculate subtotal
   double get subtotal {
-    return cartItems.fold(
-        0.0,
-        (sum, item) =>
-            sum + (item["price"] as double) * (item["quantity"] as int));
+    double sum = 0;
+    for (var item in cartItems) {
+      sum += item.price * (quantityMap[item.id] ?? 1);
+    }
+    return sum;
   }
 
-  // Calculate total
-  double get total {
-    return subtotal + deliveryCharge + tax;
-  }
+  double get total => subtotal + deliveryCharge + tax;
 
   TextEditingController promoCodeController = TextEditingController();
 
   void increaseQuantity(int index) {
-    cartItems[index]["quantity"] = (cartItems[index]["quantity"] as int) + 1;
+    var id = cartItems[index].id;
+    quantityMap[id] = (quantityMap[id] ?? 1) + 1;
+    _saveCartToStorage();
     notifyListeners();
   }
 
   void decreaseQuantity(int index) {
-    if (cartItems[index]["quantity"] == 1) {
+    var id = cartItems[index].id;
+    if ((quantityMap[id] ?? 1) <= 1) {
       removeItem(index);
     } else {
-      cartItems[index]["quantity"] = (cartItems[index]["quantity"] as int) - 1;
+      quantityMap[id] = (quantityMap[id] ?? 1) - 1;
+      _saveCartToStorage();
     }
     notifyListeners();
   }
 
+  void _saveCartToStorage() {
+    List<Map<String, dynamic>> stored = cartItems.map((item) {
+      return {
+        "item": item.toJson(),
+        "quantity": quantityMap[item.id] ?? 1,
+      };
+    }).toList();
+
+    _storageService.updateCartItems(stored);
+  }
+
   void removeItem(int index) {
+    var id = cartItems[index].id;
     cartItems.removeAt(index);
+    quantityMap.remove(id);
+    _storageService.removeFromCart(id);
     notifyListeners();
   }
 
   void applyPromoCode(String code) {
-    // Implement promo code logic here (e.g., apply discount)
     print("Promo code applied: $code");
   }
 
