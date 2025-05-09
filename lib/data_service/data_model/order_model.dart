@@ -1,9 +1,10 @@
 import '../body/address_model.dart';
+import 'menu_model.dart';
 import 'order_item.dart';
 
 class Order {
   String user;
-  List<OrderItem> items;
+  List<OrderItem> items; // Updated to List<OrderItem>
   int totalAmount;
   String paymentStatus;
   String orderStatus;
@@ -13,6 +14,7 @@ class Order {
   DateTime createdAt;
   DateTime updatedAt;
   int v;
+  String? deliveryPerson;
 
   Order({
     required this.user,
@@ -26,13 +28,14 @@ class Order {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    this.deliveryPerson,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       user: json['user'] ?? '',
       items: (json['items'] as List<dynamic>?)
-              ?.map((item) => OrderItem.fromJson(item))
+              ?.map((item) => OrderItem.fromJson(item as Map<String, dynamic>))
               .toList() ??
           [],
       totalAmount: json['totalAmount'] ?? 0,
@@ -44,6 +47,7 @@ class Order {
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
       v: json['__v'] ?? 0,
+      deliveryPerson: json['deliveryPerson'],
     );
   }
 
@@ -60,6 +64,7 @@ class Order {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       '__v': v,
+      'deliveryPerson': deliveryPerson,
     };
   }
 }

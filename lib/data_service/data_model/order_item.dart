@@ -1,8 +1,10 @@
+import 'menu_model.dart';
+
 class OrderItem {
-  String menuItem;
-  int quantity;
-  int price;
-  String id;
+  final MenuItem? menuItem; // Nullable to handle null cases
+  final int quantity;
+  final int price;
+  final String id;
 
   OrderItem({
     required this.menuItem,
@@ -13,16 +15,18 @@ class OrderItem {
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
-      menuItem: json['menuItem'] ?? '',
-      quantity: json['quantity'] ?? 0,
-      price: json['price'] ?? 0,
-      id: json['_id'] ?? '',
+      menuItem: json['menuItem'] != null
+          ? MenuItem.fromJson(json['menuItem'] as Map<String, dynamic>)
+          : null,
+      quantity: json['quantity'] as int,
+      price: json['price'] as int,
+      id: json['_id'] as String,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'menuItem': menuItem,
+      'menuItem': menuItem?.toJson(),
       'quantity': quantity,
       'price': price,
       '_id': id,

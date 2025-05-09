@@ -18,6 +18,7 @@ import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/file_picker_service.dart';
 import '../services/local_storage_service.dart';
+import '../services/order_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -40,4 +41,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => Config());
+  locator.registerLazySingleton(() => OrderService( locator<DatabaseService>()));
 }

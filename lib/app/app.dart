@@ -48,6 +48,10 @@ import 'package:food_bite/services/database_service.dart';
 import '../core/config/config.dart';
 import 'package:food_bite/services/database_service.dart';
 import 'package:food_bite/ui/dialogs/alert/alert_dialog.dart';
+import 'package:food_bite/ui/views/table_reservation/table_reservation_view.dart';
+import 'package:food_bite/ui/bottom_sheets/rate_item/rate_item_sheet.dart';
+import 'package:food_bite/ui/bottom_sheets/edit_address/edit_address_sheet.dart';
+import 'package:food_bite/services/order_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -85,6 +89,7 @@ import 'package:food_bite/ui/dialogs/alert/alert_dialog.dart';
     MaterialRoute(page: PaymentMethodsView),
     MaterialRoute(page: PaymentCardsView),
     MaterialRoute(page: AddCardView),
+    MaterialRoute(page: TableReservationView),
 // @stacked-route
   ],
   dependencies: [
@@ -98,12 +103,15 @@ import 'package:food_bite/ui/dialogs/alert/alert_dialog.dart';
     LazySingleton(classType: AuthService),
     LazySingleton(classType: DatabaseService),
     LazySingleton(classType: Config),
+    LazySingleton(classType: OrderService),
 // @stacked-service
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
     StackedBottomsheet(classType: SelectCountryCodeSheet),
     StackedBottomsheet(classType: SelectPhotoSheet),
+    StackedBottomsheet(classType: RateItemSheet),
+    StackedBottomsheet(classType: EditAddressSheet),
 // @stacked-bottom-sheet
   ],
   dialogs: [

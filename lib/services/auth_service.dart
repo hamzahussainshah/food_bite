@@ -30,6 +30,10 @@ class AuthService {
       _localStorageService.isLogedIn = true;
       _localStorageService.currentUserID = authResponse.profile!.id;
       _localStorageService.accessToken = authResponse.accessToken;
+      _localStorageService.userName = authResponse.profile!.name;
+      _localStorageService.email = authResponse.profile!.email;
+      _localStorageService.phoneNumber = authResponse.profile!.phone;
+      _localStorageService.saveAddressList(authResponse.profile!.addresses);
     }
     return authResponse;
   }
@@ -39,8 +43,6 @@ class AuthService {
       endPoint: ApiEndPoints.signup,
       data: body.toJson(),
     );
-
-    // print("MMMMMMMMMMMMMMMMMMMMMM${response.message}");
 
     // Create from full response map, not just response.data
     final signupResponse = SignupResponse.fromJson({

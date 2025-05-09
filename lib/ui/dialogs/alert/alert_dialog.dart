@@ -20,10 +20,10 @@ class AlertDialog extends StackedView<AlertDialogModel> {
 
   @override
   Widget builder(
-      BuildContext context,
-      AlertDialogModel viewModel,
-      Widget? child,
-      ) {
+    BuildContext context,
+    AlertDialogModel viewModel,
+    Widget? child,
+  ) {
     // Determine success or failure from request.data
     final isSuccess = request.data is bool && request.data == true;
 
@@ -42,11 +42,15 @@ class AlertDialog extends StackedView<AlertDialogModel> {
                   width: _graphicSize,
                   height: _graphicSize,
                   decoration: BoxDecoration(
-                    color: isSuccess ? AppColors.green.withValues(alpha: 0.6) : AppColors.red60,
+                    color: isSuccess
+                        ? AppColors.green.withValues(alpha: 0.6)
+                        : AppColors.red60,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    isSuccess ? Icons.check_circle : Icons.warning_amber_rounded,
+                    isSuccess
+                        ? Icons.check_circle
+                        : Icons.warning_amber_rounded,
                     size: 32,
                     color: Colors.white,
                   ),

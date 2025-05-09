@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:food_bite/app/app.router.dart';
+import 'package:food_bite/services/database_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -15,6 +16,10 @@ class CartViewModel extends BaseViewModel {
   Map<String, int> quantityMap = {};
 
   CartViewModel() {
+    loadCartItems();
+  }
+
+  void loadCartItems() {
     final rawItems = _storageService.getCartItemsRaw();
 
     cartItems =
@@ -88,5 +93,11 @@ class CartViewModel extends BaseViewModel {
 
   void navigateBack() {
     _navigationService.back();
+  }
+
+  void navigateToNavigationView() {
+    _navigationService.popUntil(
+      (route) => route.settings.name == Routes.navigationView,
+    );
   }
 }

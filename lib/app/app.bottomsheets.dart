@@ -7,7 +7,9 @@
 import 'package:stacked_services/stacked_services.dart';
 
 import 'app.locator.dart';
+import '../ui/bottom_sheets/edit_address/edit_address_sheet.dart';
 import '../ui/bottom_sheets/notice/notice_sheet.dart';
+import '../ui/bottom_sheets/rate_item/rate_item_sheet.dart';
 import '../ui/bottom_sheets/select_country_code/select_country_code_sheet.dart';
 import '../ui/bottom_sheets/select_photo/select_photo_sheet.dart';
 
@@ -15,6 +17,8 @@ enum BottomSheetType {
   notice,
   selectCountryCode,
   selectPhoto,
+  rateItem,
+  editAddress,
 }
 
 void setupBottomSheetUi() {
@@ -27,6 +31,10 @@ void setupBottomSheetUi() {
         SelectCountryCodeSheet(request: request, completer: completer),
     BottomSheetType.selectPhoto: (context, request, completer) =>
         SelectPhotoSheet(request: request, completer: completer),
+    BottomSheetType.rateItem: (context, request, completer) =>
+        RateItemSheet(request: request, completer: completer),
+    BottomSheetType.editAddress: (context, request, completer) =>
+        EditAddressSheet(request: request, completer: completer),
   };
 
   bottomsheetService.setCustomSheetBuilders(builders);

@@ -73,4 +73,26 @@ class User {
       '__v': v,
     };
   }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['_id'] ?? "",
+      name: map['name'] ?? "",
+      email: map['email'] ?? "",
+      phone: map['phone'] ?? "",
+      password: map['password'] ?? "",
+      resetOtp: map['resetOtp'] ?? "",
+      resetOtpExpireAt: map['resetOtpExpireAt'] ?? 0,
+      otpVerified: map['otpVerified'] ?? false,
+      role: map['role'] ?? "",
+      addresses: (map['addresses'] as List<dynamic>?)
+              ?.map((address) => Address.fromJson(address))
+              .toList() ??
+          [],
+      favorites: map['favorites'] as List<dynamic>? ?? [],
+      createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(map['updatedAt'] ?? '') ?? DateTime.now(),
+      v: map['__v'] ?? 0,
+    );
+  }
 }

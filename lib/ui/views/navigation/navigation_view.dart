@@ -69,7 +69,7 @@ class NavigationView extends StackedView<NavigationViewModel> {
                           viewModel.scaffoldKey.currentState?.openDrawer();
                         },
                         child: Container(
-                          padding: EdgeInsets.all(12.r),
+                          padding: EdgeInsets.all(6.r),
                           width: 35.w,
                           height: 35.h,
                           decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class NavigationView extends StackedView<NavigationViewModel> {
                           child: CustomImageView(
                             svgPath: AppIcons.list,
                             fit: BoxFit.cover,
-                            width: 24.w,
+                            width: 26.w,
                             color: AppColors.red90,
                           ),
                         ),
@@ -138,8 +138,14 @@ class NavigationView extends StackedView<NavigationViewModel> {
               // Main Content
               Expanded(
                 child: viewModel.isDrawerOpen
-                    ? viewModel.drawerScreens[viewModel.drawerIndex]
-                    : viewModel.bottomNavScreen[viewModel.currentIndex],
+                    ? IndexedStack(
+                        index: viewModel.drawerIndex,
+                        children: viewModel.drawerScreens,
+                      )
+                    : IndexedStack(
+                        index: viewModel.currentIndex,
+                        children: viewModel.bottomNavScreens,
+                      ),
               ),
             ],
           ),

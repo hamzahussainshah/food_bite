@@ -6,6 +6,8 @@ import 'package:food_bite/ui/common/text_styles.dart';
 import 'package:food_bite/ui/widgets/custom_elevated_button.dart';
 import 'package:food_bite/ui/widgets/custom_navbar.dart';
 import 'package:food_bite/ui/widgets/custom_text_field.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:stacked/stacked.dart';
 
 import 'delivery_locations_viewmodel.dart';
@@ -19,139 +21,140 @@ class DeliveryLocationsView extends StackedView<DeliveryLocationsViewModel> {
     DeliveryLocationsViewModel viewModel,
     Widget? child,
   ) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: "Delivery Locations",
-        onBackPressed: () {
-          viewModel.back();
-        },
+    return ModalProgressHUD(
+      inAsyncCall: viewModel.isBusy,
+      color: Colors.black54,
+      opacity: 1,
+      progressIndicator: LoadingAnimationWidget.beat(
+        size: 40,
+        color: AppColors.red90,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: viewModel.formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Existing locations (Home and Office)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildLocationCard(
-                              title: "Home",
-                              address: "123 Main Street, City, State, Pincode",
-                              onEdit: () {
-                                // Add edit functionality for Home address
-                              },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: CustomAppBar(
+          title: "Delivery Locations",
+          onBackPressed: () {
+            viewModel.back();
+          },
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: viewModel.formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Show all saved addresses
+                          if (viewModel.addressList.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Saved Addresses",
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                20.verticalSpace,
+                                Wrap(
+                                  spacing: 10.w,
+                                  runSpacing: 10.h,
+                                  children:
+                                      viewModel.addressList.map((address) {
+                                    return _buildLocationCard(
+                                      title: address.street,
+                                      address:
+                                          "${address.city}, ${address.country}, ${address.postalCode}",
+                                      onEdit: () {
+                                        viewModel.editAddress(address);
+                                      },
+                                      onDelete: () {
+                                        viewModel.showDeleteDialog(address);
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                                30.verticalSpace,
+                              ],
                             ),
-                            _buildLocationCard(
-                              title: "Office",
-                              address: "123 Main Street, City, State, Pincode",
-                              onEdit: () {
-                                // Add edit functionality for Office address
-                              },
-                            ),
-                          ],
-                        ),
-                        30.verticalSpace,
 
-                        // Add a new address section
-                        Text(
-                          "Add a new address",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                          // Add a new address section
+                          Text(
+                            "Add New Address",
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
-                        ),
-                        20.verticalSpace,
+                          20.verticalSpace,
 
-                        // Form fields
-                        CustomTextField(
-                          hintText: "Full Name",
-                          controller: viewModel.fullNameController,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return "Full Name is required";
-                            }
-                            return null;
-                          },
-                        ),
-                        15.verticalSpace,
-                        CustomTextField(
-                          hintText: "Phone Number",
-                          controller: viewModel.phoneNumberController,
-                          keyboardType: TextInputType.phone,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return "Phone Number is required";
-                            }
-                            return null;
-                          },
-                        ),
-                        15.verticalSpace,
-                        CustomTextField(
-                          hintText: "Delivery Address",
-                          controller: viewModel.addressController,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return "Address is required";
-                            }
-                            return null;
-                          },
-                        ),
-                        15.verticalSpace,
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomTextField(
-                                hintText: "Pincode",
-                                controller: viewModel.pincodeController,
-                                keyboardType: TextInputType.number,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Pincode is required";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            10.horizontalSpace,
-                            Expanded(
-                              child: CustomTextField(
-                                  hintText: "City & State",
-                                  controller: viewModel.cityStateController,
-                                  validate: (value) {
-                                    if (value!.isEmpty) {
-                                      return "City & State is required";
-                                    }
-                                    return null;
-                                  }),
-                            ),
-                          ],
-                        ),
-
-                        30.verticalSpace,
-                      ],
+                          CustomTextField(
+                            hintText: 'Street',
+                            controller: viewModel.streetController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Street is required';
+                              }
+                              return null;
+                            },
+                          ),
+                          10.verticalSpace,
+                          CustomTextField(
+                            hintText: 'City',
+                            controller: viewModel.cityController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'City is required';
+                              }
+                              return null;
+                            },
+                          ),
+                          10.verticalSpace,
+                          CustomTextField(
+                            hintText: 'Postal code',
+                            controller: viewModel.postalCodeController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Postal code is required';
+                              }
+                              return null;
+                            },
+                          ),
+                          10.verticalSpace,
+                          CustomTextField(
+                            hintText: 'Country',
+                            controller: viewModel.countryController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Country is required';
+                              }
+                              return null;
+                            },
+                          ),
+                          30.verticalSpace,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              CustomElevatedButton(
-                text: "Save",
-                onPressed: () {
-                  if (viewModel.formKey.currentState!.validate()) {
-                    viewModel.saveAddress();
-                  }
-                },
-              )
-            ],
+                CustomElevatedButton(
+                  text: "Save",
+                  onPressed: () {
+                    if (viewModel.formKey.currentState!.validate()) {
+                      viewModel.saveAddress();
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -163,9 +166,10 @@ class DeliveryLocationsView extends StackedView<DeliveryLocationsViewModel> {
     required String title,
     required String address,
     required VoidCallback onEdit,
+    required VoidCallback? onDelete,
   }) {
     return Container(
-      width: 150.w, // Fixed width for each card
+      width: 150.w,
       padding: EdgeInsets.all(15.w),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -176,7 +180,9 @@ class DeliveryLocationsView extends StackedView<DeliveryLocationsViewModel> {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.red60.withValues(alpha: 0.3),
+            color: AppColors.red60.withValues(
+              alpha: 0.3,
+            ),
             blurRadius: 8.r,
             spreadRadius: 0.r,
             offset: Offset(0, 18.h),
@@ -187,31 +193,43 @@ class DeliveryLocationsView extends StackedView<DeliveryLocationsViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              InkWell(
+                onTap: onDelete,
+                child: Icon(
+                  Icons.delete,
+                  color: AppColors.red90,
+                  size: 20.sp,
+                ),
+              ),
               Spacer(),
-              Text(title,
-                  style: AppTextStyles.mSemibold.copyWith(
-                    color: AppColors.headingColor,
-                  )),
-              Spacer(),
-              GestureDetector(
+              InkWell(
                 onTap: onEdit,
                 child: Icon(
                   Icons.edit,
+                  color: AppColors.black,
                   size: 20.sp,
-                  color: AppColors.headingColor,
                 ),
               ),
             ],
           ),
+          Center(
+            child: Text(
+              title,
+              style: AppTextStyles.mSemibold.copyWith(
+                color: AppColors.headingColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           10.verticalSpace,
           Text(
-              textAlign: TextAlign.center,
-              address,
-              style: AppTextStyles.xsMedium2.copyWith(
-                color: AppColors.headingColor,
-              )),
+            address,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.xsMedium2.copyWith(
+              color: AppColors.headingColor,
+            ),
+          ),
         ],
       ),
     );

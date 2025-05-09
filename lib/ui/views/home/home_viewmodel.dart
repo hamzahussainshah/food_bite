@@ -18,6 +18,7 @@ class HomeViewModel extends BaseViewModel {
   final PageController pageController = PageController();
   final LocalStorageService _storageService = locator<LocalStorageService>();
   final DialogService _dialogService = locator<DialogService>();
+  bool isLoading = false;
 
   String get counterLabel => 'Counter is: $_counter';
 
@@ -28,9 +29,11 @@ class HomeViewModel extends BaseViewModel {
   int get selectedButtonIndex => _selectedButtonIndex;
 
   List<MenuItem> menuItems = [];
+  List<MenuItem> filteredMenuItems = []; // Filtered list for Best Sellers
 
   void selectButton(int index) {
     _selectedButtonIndex = index;
+    filterMenuItems(); // Filter items when a category is selected
     notifyListeners();
   }
 
@@ -45,8 +48,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void addItemToCart(MenuItem item) {
-    _storageService.addToCart(item).then((value){
-      print('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV::::: $value');
+    _storageService.addToCart(item).then((value) {
       if (value) {
         _dialogService.showCustomDialog(
           variant: DialogType.alert,
@@ -58,74 +60,64 @@ class HomeViewModel extends BaseViewModel {
         _dialogService.showCustomDialog(
           variant: DialogType.alert,
           title: "Error",
-          description: "Failed to add ${item.name} to cart. Item already in cart",
+          description:
+              "Failed to add ${item.name} to cart. Item already in cart",
           data: value,
         );
       }
     });
   }
-  // List of button labels (you can adjust these as needed)
+
+  // List of button labels (categories)
   final List<String> buttonLabels = [
     "All",
-    "Burgers",
+    "Burger",
     "Pizza",
-    "Desserts",
+    "Dessert",
     "Drinks",
-    "Snacks",
-    "Salads",
+    "Pasta",
   ];
+
   void fetchMenu() async {
-    setBusy(true);
+    isLoading = true;
+    notifyListeners();
+
     var response = await _databaseService.getMenu();
-    print("MMMMMMMMMMMMMMMMMMMMMMMMMMM Menu items: ${response.items.length}");
-    print(
-        "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ${response.success}");
     if (response.success) {
-      print("MMMMMMMMMMMMMMMMMMMMMMMMMMM Menu items: ${response.items.length}");
       menuItems = response.items;
+      filterMenuItems(); // Initial filtering (default to "All")
+
+      isLoading = false;
       notifyListeners();
-      print("MMMMMMMMMMMMMMMMMMMMMMMMMMM Menu items: ${menuItems.length}");
-      setBusy(false);
+      await _storageService.deleteMenuItems();
+      // Save to local storage
+      await _storageService.saveMenuItems(menuItems);
     } else {
-      setBusy(false);
-      // Handle error
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  final List<Map<String, dynamic>> bestSellerItems = [
-    {
-      "name": "Margherita Pizza",
-      "description": "Classic Italian pizza with fresh mozzarella.",
-      "price": 12.99,
-      "rating": 4.1,
-      "imagePath": AppImages.burger, // Replace with actual image path
-    },
-    {
-      "name": "Margherita Pizza",
-      "description": "Classic Italian pizza with fresh mozzarella.",
-      "price": 12.99,
-      "rating": 4.1,
-      "imagePath": AppImages.burger, // Replace with actual image path
-    },
-    {
-      "name": "Margherita Pizza",
-      "description": "Classic Italian pizza with fresh mozzarella.",
-      "price": 12.99,
-      "rating": 4.1,
-      "imagePath": AppImages.burger, // Replace with actual image path
-    },
-    {
-      "name": "Margherita Pizza",
-      "description": "Classic Italian pizza with fresh mozzarella.",
-      "price": 12.99,
-      "rating": 4.1,
-      "imagePath": AppImages.burger, // Replace with actual image path
-    },
-    // Add more items as needed
-  ];
+  void filterMenuItems() {
+    final selectedCategory = buttonLabels[_selectedButtonIndex];
+    if (selectedCategory == "All") {
+      filteredMenuItems = menuItems; // Show all items
+    } else {
+      filteredMenuItems =
+          menuItems.where((item) => item.category == selectedCategory).toList();
+    }
+  }
 
-  void navigateToDetailsView() {
+  void navigateToDetailsView(MenuItem item) {
     print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-    _navigationService.navigateToItemDetailsView();
+    _navigationService.navigateToItemDetailsView(menu: item);
+  }
+
+  navigateToMenuView() {
+    _navigationService.navigateTo(Routes.menuView);
+  }
+
+  navigateToBookTableView() {
+    _navigationService.navigateTo(Routes.tableReservationView);
   }
 }

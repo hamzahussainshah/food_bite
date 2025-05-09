@@ -9,7 +9,7 @@ class OrderResponse extends BaseResponse {
 
   factory OrderResponse.fromJson(Map<String, dynamic> json) {
     return OrderResponse(
-      json['success'] ?? json['status'] ?? true,
+      json['success'] ?? true, // Default to true since API indicates success
       message: json['message'] ?? 'Success',
       order: json['order'] != null ? Order.fromJson(json['order']) : null,
     );
