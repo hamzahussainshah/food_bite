@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_bite/data_service/data_model/menu_model.dart';
 import 'package:food_bite/ui/common/app_colors.dart';
 import 'package:food_bite/ui/common/assets.dart';
 import 'package:food_bite/ui/common/text_styles.dart';
@@ -7,10 +8,12 @@ import 'package:food_bite/ui/widgets/custom_elevated_button.dart';
 import 'package:food_bite/ui/widgets/custom_image_widget.dart';
 import 'package:food_bite/ui/widgets/custom_navbar.dart';
 import 'package:stacked/stacked.dart';
+import '../../../data_service/data_model/review.dart';
 import 'item_details_viewmodel.dart';
 
 class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
-  const ItemDetailsView({Key? key}) : super(key: key);
+  final MenuItem menu;
+  const ItemDetailsView({required this.menu, Key? key}) : super(key: key);
 
   @override
   Widget builder(
@@ -18,6 +21,12 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
     ItemDetailsViewModel viewModel,
     Widget? child,
   ) {
+    // Calculate average rating from menu.reviews if available
+    double averageRating = viewModel.menu.reviews!.isNotEmpty
+        ? viewModel.menu.reviews!.map((r) => r.rating).reduce((a, b) => a + b) /
+            viewModel.menu.reviews!.length
+        : 4.1;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: CustomAppBar(
@@ -33,92 +42,126 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Item Image with Favorite Icon
-              Center(
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50.w),
-                      child: CustomImageView(
-                        imagePath: AppImages.burger,
-                        height: 200.h,
-                        width: 200.w,
-                        fit: BoxFit.cover,
-                      ),
+              // Center(
+              //   child: Stack(
+              //     alignment: Alignment.topRight,
+              //     children: [
+              //       Padding(
+              //         padding: EdgeInsets.symmetric(horizontal: 50.w),
+              //         child: CustomImageView(
+              //           url: menu.images.isNotEmpty
+              //               ? menu.images.first
+              //               : AppImages.burger,
+              //           height: 200.h,
+              //           width: 200.w,
+              //           fit: BoxFit.cover,
+              //         ),
+              //       ),
+              //       Positioned(
+              //         top: 10.h,
+              //         right: 0.w,
+              //         child: GestureDetector(
+              //           onTap: () {
+              //             viewModel.toggleFavorite();
+              //           },
+              //           child: Container(
+              //             padding: EdgeInsets.all(8.r),
+              //             decoration: BoxDecoration(
+              //               shape: BoxShape.circle,
+              //               color: viewModel.isFavorite
+              //                   ? Colors.white
+              //                   : AppColors.red90,
+              //               boxShadow: [
+              //                 BoxShadow(
+              //                   color: Colors.black.withOpacity(0.1),
+              //                   blurRadius: 4.r,
+              //                   offset: Offset(0, 2.h),
+              //                 ),
+              //               ],
+              //             ),
+              //             child: Icon(
+              //               viewModel.isFavorite
+              //                   ? Icons.favorite_outlined
+              //                   : Icons.favorite_outlined,
+              //               color: viewModel.isFavorite
+              //                   ? AppColors.red90
+              //                   : AppColors.white,
+              //               size: 24.sp,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50.w),
+                child: Center(
+                  child: SizedBox(
+                    height: 200.h,
+                    width: 200.w,
+                    child: PageView.builder(
+                      itemCount:
+                          menu.images.isNotEmpty ? menu.images.length : 1,
+                      itemBuilder: (context, index) {
+                        String imageUrl = menu.images.isNotEmpty
+                            ? menu.images[index]
+                            : AppImages.burger;
+                        return CustomImageView(
+                          url: imageUrl,
+                          height: 200.h,
+                          width: 200.w,
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
-                    Positioned(
-                      top: 10.h,
-                      right: 0.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          viewModel.toggleFavorite();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(8.r),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: viewModel.isFavorite
-                                ? Colors.white
-                                : AppColors.red90,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 4.r,
-                                offset: Offset(0, 2.h),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            viewModel.isFavorite
-                                ? Icons.favorite_outlined
-                                : Icons.favorite_outlined,
-                            color: viewModel.isFavorite
-                                ? AppColors.red90
-                                : AppColors.white,
-                            size: 24.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+              // CustomImageView(
+              //   url: menu.images.first,
+              //   height: 200.h,
+              //   width: 200.w,
+              //   fit: BoxFit.cover,
+              // ),
+
               16.verticalSpace,
 
-              // Size Selection
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSizeButton(
-                    size: "S",
-                    isSelected: viewModel.selectedSize == "S",
-                    onTap: () {
-                      viewModel.selectSize("S");
-                    },
-                  ),
-                  10.horizontalSpace,
-                  _buildSizeButton(
-                    size: "M",
-                    isSelected: viewModel.selectedSize == "M",
-                    onTap: () {
-                      viewModel.selectSize("M");
-                    },
-                  ),
-                  10.horizontalSpace,
-                  _buildSizeButton(
-                    size: "L",
-                    isSelected: viewModel.selectedSize == "L",
-                    onTap: () {
-                      viewModel.selectSize("L");
-                    },
-                  ),
-                ],
-              ),
-              24.verticalSpace,
+              // // Size Selection
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     _buildSizeButton(
+              //       size: "S",
+              //       isSelected: viewModel.selectedSize == "S",
+              //       onTap: () {
+              //         viewModel.selectSize("S");
+              //       },
+              //     ),
+              //     10.horizontalSpace,
+              //     _buildSizeButton(
+              //       size: "M",
+              //       isSelected: viewModel.selectedSize == "M",
+              //       onTap: () {
+              //         viewModel.selectSize("M");
+              //       },
+              //     ),
+              //     10.horizontalSpace,
+              //     _buildSizeButton(
+              //       size: "L",
+              //       isSelected: viewModel.selectedSize == "L",
+              //       onTap: () {
+              //         viewModel.selectSize("L");
+              //       },
+              //     ),
+              //   ],
+              // ),
+              // 24.verticalSpace,
 
               // Item Details
               Text(
-                "Margherita Pizza",
+                menu.name,
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
@@ -127,7 +170,7 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
               ),
               8.verticalSpace,
               Text(
-                "A timeless classic! Enjoy the perfect blend of fresh mozzarella, tangy tomato sauce, and aromatic basil on a crispy, hand-tossed crust.",
+                menu.description,
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.gray500,
@@ -144,7 +187,7 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
                   ),
                   4.horizontalSpace,
                   Text(
-                    "4.1 Rating",
+                    "${averageRating.toStringAsFixed(1)} Rating",
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
@@ -168,55 +211,55 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
                   ),
                 ],
               ),
-              24.verticalSpace,
+              // 24.verticalSpace,
 
               // Add-Ons Section
-              Text(
-                "Choice of Add On",
-                style: AppTextStyles.lSemibold.copyWith(
-                  color: AppColors.headingColor,
-                ),
-              ),
-              16.verticalSpace,
-              _buildAddOnItem(
-                name: "Mozzarella",
-                price: 1.50,
-                isSelected: viewModel.selectedAddOns.contains("Mozzarella"),
-                onTap: () {
-                  viewModel.toggleAddOn("Mozzarella");
-                },
-                imagePath: AppImages.mozarella,
-              ),
-              16.verticalSpace,
-              _buildAddOnItem(
-                name: "Jalapeños",
-                price: 1.00,
-                isSelected: viewModel.selectedAddOns.contains("Jalapeños"),
-                onTap: () {
-                  viewModel.toggleAddOn("Jalapeños");
-                },
-                imagePath: AppImages.jalapenos,
-              ),
-              16.verticalSpace,
-              _buildAddOnItem(
-                name: "Pesto Sauce",
-                price: 2.00,
-                isSelected: viewModel.selectedAddOns.contains("Pesto Sauce"),
-                onTap: () {
-                  viewModel.toggleAddOn("Pesto Sauce");
-                },
-                imagePath: AppImages.pestoSauce,
-              ),
-              16.verticalSpace,
-              _buildAddOnItem(
-                name: "Pepperoni",
-                price: 1.00,
-                isSelected: viewModel.selectedAddOns.contains("Pepperoni"),
-                onTap: () {
-                  viewModel.toggleAddOn("Pepperoni");
-                },
-                imagePath: AppImages.peparoni,
-              ),
+              // Text(
+              //   "Choice of Add On",
+              //   style: AppTextStyles.lSemibold.copyWith(
+              //     color: AppColors.headingColor,
+              //   ),
+              // ),
+              // 16.verticalSpace,
+              // _buildAddOnItem(
+              //   name: "Mozzarella",
+              //   price: 1.50,
+              //   isSelected: viewModel.selectedAddOns.contains("Mozzarella"),
+              //   onTap: () {
+              //     viewModel.toggleAddOn("Mozzarella");
+              //   },
+              //   imagePath: AppImages.mozarella,
+              // ),
+              // 16.verticalSpace,
+              // _buildAddOnItem(
+              //   name: "Jalapeños",
+              //   price: 1.00,
+              //   isSelected: viewModel.selectedAddOns.contains("Jalapeños"),
+              //   onTap: () {
+              //     viewModel.toggleAddOn("Jalapeños");
+              //   },
+              //   imagePath: AppImages.jalapenos,
+              // ),
+              // 16.verticalSpace,
+              // _buildAddOnItem(
+              //   name: "Pesto Sauce",
+              //   price: 2.00,
+              //   isSelected: viewModel.selectedAddOns.contains("Pesto Sauce"),
+              //   onTap: () {
+              //     viewModel.toggleAddOn("Pesto Sauce");
+              //   },
+              //   imagePath: AppImages.pestoSauce,
+              // ),
+              // 16.verticalSpace,
+              // _buildAddOnItem(
+              //   name: "Pepperoni",
+              //   price: 1.00,
+              //   isSelected: viewModel.selectedAddOns.contains("Pepperoni"),
+              //   onTap: () {
+              //     viewModel.toggleAddOn("Pepperoni");
+              //   },
+              //   imagePath: AppImages.peparoni,
+              // ),
               32.verticalSpace,
 
               // Reviews Section
@@ -228,17 +271,17 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
                   ),
                 ),
                 16.verticalSpace,
-                ...viewModel.reviews.asMap().entries.map((entry) {
+                ...viewModel.menu.reviews!.asMap().entries.map((entry) {
                   int index = entry.key;
-                  Map<String, dynamic> review = entry.value;
+                  Review review = entry.value;
                   return _buildReviewItem(
                     index: index,
-                    userName: review["userName"],
-                    timestamp: review["timestamp"],
-                    rating: review["rating"],
-                    comment: review["comment"],
-                    likes: review["likes"],
-                    images: List<String>.from(review["images"]),
+                    userName: review.user.name,
+                    timestamp: review.createdAt.toString().split(' ')[0],
+                    rating: review.rating,
+                    comment: review.comment,
+                    likes: 0, // Review model doesn't have likes; add if needed
+                    images: [], // Review model doesn't have images; add if needed
                     hasLiked: viewModel.userLikedReviews.contains(index),
                     onLikeToggle: () {
                       viewModel.toggleLike(index);
@@ -249,7 +292,12 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
               ],
 
               // Add to Cart Button
-              CustomElevatedButton(text: "Add to Cart", onPressed: () {}),
+              CustomElevatedButton(
+                text: "Add to Cart",
+                onPressed: () {
+                  viewModel.addToCart();
+                },
+              ),
               20.verticalSpace, // Bottom padding
             ],
           ),
@@ -370,13 +418,23 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
         children: [
           Row(
             children: [
-              CustomImageView(
-                imagePath: AppImages.person,
-                width: 40.w,
-                height: 40.h,
-                fit: BoxFit.cover,
-                radius: BorderRadius.circular(20.r),
+              Container(
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.gray80),
+                child: Icon(
+                  Icons.person,
+                  size: 26,
+                  color: AppColors.gray700,
+                ),
               ),
+              // CustomImageView(
+              //   imagePath: AppImages.profile,
+              //   width: 40.w,
+              //   height: 40.h,
+              //   fit: BoxFit.cover,
+              //   radius: BorderRadius.circular(20.r),
+              // ),
               16.horizontalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,26 +480,26 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
             ),
           ),
           8.verticalSpace,
-          GestureDetector(
-            onTap: onLikeToggle,
-            child: Row(
-              children: [
-                Icon(
-                  hasLiked ? Icons.favorite : Icons.favorite_border,
-                  color: AppColors.red90,
-                  size: 20.sp,
-                ),
-                4.horizontalSpace,
-                Text(
-                  "$likes likes",
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: hasLiked ? AppColors.red90 : AppColors.gray500,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: onLikeToggle,
+          //   child: Row(
+          //     children: [
+          //       Icon(
+          //         hasLiked ? Icons.favorite : Icons.favorite_border,
+          //         color: AppColors.red90,
+          //         size: 20.sp,
+          //       ),
+          //       4.horizontalSpace,
+          //       Text(
+          //         "$likes likes",
+          //         style: TextStyle(
+          //           fontSize: 14.sp,
+          //           color: hasLiked ? AppColors.red90 : AppColors.gray500,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           if (images.isNotEmpty) ...[
             12.verticalSpace,
             SizedBox(
@@ -468,6 +526,14 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
   }
 
   @override
+  void onViewModelReady(ItemDetailsViewModel viewModel) {
+    print("IIIIIIIIIIIII!!!!!!!!!!!!!!!!${menu.images.first}");
+    print("IIIIIIIIIIIII@@@@@@@@@@@@@@@@${menu.images[1]}");
+    // Future.delayed()
+    super.onViewModelReady(viewModel);
+  }
+
+  @override
   ItemDetailsViewModel viewModelBuilder(BuildContext context) =>
-      ItemDetailsViewModel();
+      ItemDetailsViewModel(menu: menu); // Pass menu to the view model
 }

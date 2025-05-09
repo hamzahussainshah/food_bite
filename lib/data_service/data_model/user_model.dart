@@ -1,52 +1,47 @@
 class UserModel {
   String id;
-
   String firstName;
-
   String email;
+  String? phoneNumber;
 
-  UserModel(
-      {required this.id,
-        required this.firstName,
-        required this.email,
-      });
+  UserModel({
+    required this.id,
+    required this.firstName,
+    required this.email,
+    this.phoneNumber,
+  });
 
-  // CopyWith method for cloning the object with new values
   UserModel copyWith({
     String? id,
-    String? phone,
     String? firstName,
-    String? surname,
     String? email,
-    String? dateOfBirth,
-    String? gender,
-    String? photo,
-    String? country,
-    String? fcm,
-    String? role,
+    String? phoneNumber,
   }) {
     return UserModel(
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
 
-  // Convert to a map, excluding photo as it will be sent as a File
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'firstName': firstName,
+      '_id': id,
+      'name': firstName,
       'email': email,
+      'phone': phoneNumber,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] ?? "",
-      firstName: map['firstName'] ?? "",
+      id: map['_id'] ?? "",
+      firstName: map['name'] ?? "",
       email: map['email'] ?? "",
+      phoneNumber: map['phone'] ?? "",
     );
   }
+
   Map<String, dynamic> toJson() => toMap();
 }
