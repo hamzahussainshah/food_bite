@@ -27,20 +27,11 @@ class NavigationViewModel extends IndexTrackingViewModel {
   int drawerIndex = 0;
   int selectedDrawerIndex = 0; // Initialize to 0 (Home) to match initial state
 
-  // Persistent list of drawer screens
-  final List<Widget> drawerScreens = [
+  List<Widget> drawerScreens = [
     const HomeView(),
     const MenuView(),
     const CartView(),
     const OrdersView(),
-    const ProfileView(),
-  ];
-
-  // Persistent list of bottom navigation screens
-  final List<Widget> bottomNavScreens = [
-    const HomeView(),
-    const TrackView(),
-    const HistoryView(),
     const ProfileView(),
   ];
 
@@ -126,6 +117,13 @@ class NavigationViewModel extends IndexTrackingViewModel {
     "History",
     "Profile",
   ];
+
+  List<Widget> get bottomNavScreen => [
+        const HomeView(),
+        const TrackView(),
+        const HistoryView(),
+        const ProfileView(),
+      ];
 
   void changeLocation() {
     // Example: Navigate to a location picker screen

@@ -34,135 +34,115 @@ class CartView extends StackedView<CartViewModel> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          viewModel.loadCartItems();
-        },
-        child: viewModel.cartItems.isEmpty
-            ? SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          size: 80.sp,
-                          color: AppColors.gray500,
-                        ),
-                        16.verticalSpace,
-                        Text(
-                          "Your cart is empty",
-                          style: AppTextStyles.mRegular.copyWith(
-                            color: AppColors.gray500,
-                          ),
-                        ),
-                        24.verticalSpace,
-                        SizedBox(
-                          width: 200.w,
-                          child: CustomElevatedButton(
-                            text: "Shop Now",
-                            backgroundColor: AppColors.red90,
-                            onPressed: () {
-                              viewModel.navigateToNavigationView();
-                            },
-                          ),
-                        ),
-                      ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Cart Items
+              if (viewModel.cartItems.isEmpty)
+                Center(
+                  child: Text(
+                    "Your cart is empty",
+                    style: AppTextStyles.mRegular.copyWith(
+                      color: AppColors.gray500,
                     ),
                   ),
+                )
+              else
+                Column(
+                  children: viewModel.cartItems.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    Map<String, dynamic> item = entry.value;
+                    return _buildCartItem(
+                      index: index,
+                      imagePath: item["imagePath"],
+                      name: item["name"],
+                      addOns: item["addOns"],
+                      price: item["price"],
+                      quantity: item["quantity"],
+                      onIncrease: () => viewModel.increaseQuantity(index),
+                      onDecrease: () => viewModel.decreaseQuantity(index),
+                      onRemove: () => viewModel.removeItem(index),
+                    );
+                  }).toList(),
                 ),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Cart Items
-                      Column(
-                        children:
-                            viewModel.cartItems.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          final item = entry.value;
-                          final quantity = viewModel.quantityMap[item.id] ?? 1;
+              32.verticalSpace,
 
-                          return _buildCartItem(
-                            index: index,
-                            imagePath:
-                                item.images.isNotEmpty ? item.images.first : "",
-                            name: item.name,
-                            addOns: item.ingredients.join(", "),
-                            price: item.price.toDouble(),
-                            quantity: quantity,
-                            onIncrease: () => viewModel.increaseQuantity(index),
-                            onDecrease: () => viewModel.decreaseQuantity(index),
-                            onRemove: () => viewModel.removeItem(index),
-                          );
-                        }).toList(),
-                      ),
-                      32.verticalSpace,
-
-                      // Promo Code Section
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              hintText: "Promo Code",
-                              controller: viewModel.promoCodeController,
-                              onFieldSubmitted: (value) {
-                                viewModel.applyPromoCode(value);
-                              },
-                            ),
-                          ),
-                          16.horizontalSpace,
-                          SizedBox(
-                            width: 100.w,
-                            child: CustomElevatedButton(
-                              backgroundColor: AppColors.red90,
-                              text: "Apply",
-                              onPressed: () {
-                                viewModel.applyPromoCode("");
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      32.verticalSpace,
-
-                      // Summary Section
-                      _buildSummaryRow("Subtotal:",
-                          "\$${viewModel.subtotal.toStringAsFixed(2)}"),
-                      8.verticalSpace,
-                      _buildSummaryRow("Delivery charge:",
-                          "\$${viewModel.deliveryCharge.toStringAsFixed(2)}"),
-                      8.verticalSpace,
-                      _buildSummaryRow(
-                          "Tax:", "\$${viewModel.tax.toStringAsFixed(2)}"),
-                      16.verticalSpace,
-                      _buildSummaryRow(
-                          "TOTAL", "\$${viewModel.total.toStringAsFixed(2)}",
-                          isTotal: true),
-                      32.verticalSpace,
-
-                      // Proceed to Checkout Button
-                      CustomElevatedButton(
-                        text: "Proceed to Checkout",
+              // Promo Code Section
+              Row(
+                children: [
+                  // Expanded(
+                  //   child: TextField(
+                  //     decoration: InputDecoration(
+                  //       hintText: "Promo Code",
+                  //       hintStyle: AppTextStyles.xsRegular.copyWith(
+                  //         color: AppColors.gray500,
+                  //       ),
+                  //       filled: true,
+                  //       fillColor: AppColors.gray50,
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(12.r),
+                  //         borderSide: BorderSide.none,
+                  //       ),
+                  //       contentPadding: EdgeInsets.symmetric(
+                  //         horizontal: 16.w,
+                  //         vertical: 14.h,
+                  //       ),
+                  //     ),
+                  //     style: AppTextStyles.xsRegular,
+                  //     onSubmitted: (value) {
+                  //       viewModel.applyPromoCode(value);
+                  //     },
+                  //   ),
+                  // ),
+                  Expanded(
+                      child: CustomTextField(
+                    hintText: "Promo Code",
+                    controller: viewModel.promoCodeController,
+                    onFieldSubmitted: (value) {
+                      viewModel.applyPromoCode(value);
+                    },
+                  )),
+                  16.horizontalSpace,
+                  SizedBox(
+                    width: 100.w,
+                    child: CustomElevatedButton(
+                        backgroundColor: AppColors.red90,
+                        text: "Apply",
                         onPressed: () {
-                          viewModel.proceedToCheckout();
-                        },
-                      ),
-                      20.verticalSpace, // Bottom padding
-                    ],
+                          viewModel.applyPromoCode("");
+                        }),
                   ),
-                ),
+                ],
               ),
+              32.verticalSpace,
+
+              // Summary Section
+              _buildSummaryRow(
+                  "Subtotal:", "\$${viewModel.subtotal.toStringAsFixed(2)}"),
+              8.verticalSpace,
+              _buildSummaryRow("Delivery charge:",
+                  "\$${viewModel.deliveryCharge.toStringAsFixed(2)}"),
+              8.verticalSpace,
+              _buildSummaryRow("Tax:", "\$${viewModel.tax.toStringAsFixed(2)}"),
+              16.verticalSpace,
+              _buildSummaryRow(
+                  "TOTAL", "\$${viewModel.total.toStringAsFixed(2)}",
+                  isTotal: true),
+              32.verticalSpace,
+
+              // Proceed to Checkout Button
+              CustomElevatedButton(
+                  text: "Proceed to Checkout",
+                  onPressed: () {
+                    viewModel.proceedToCheckout();
+                  }),
+              20.verticalSpace, // Bottom padding
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -199,7 +179,7 @@ class CartView extends StackedView<CartViewModel> {
         child: Row(
           children: [
             CustomImageView(
-              url: imagePath,
+              imagePath: imagePath,
               width: 60.w,
               height: 60.h,
               fit: BoxFit.cover,

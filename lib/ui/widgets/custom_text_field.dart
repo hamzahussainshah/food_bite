@@ -19,7 +19,6 @@ class CustomTextField extends StatelessWidget {
   final String? suffixText;
   final Function(String)? onFieldSubmitted;
   final Function()? onTapSuffix;
-  final bool? readOnly;
   const CustomTextField({
     super.key,
     required this.hintText,
@@ -36,7 +35,6 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.onFieldSubmitted,
     this.onTapSuffix,
-    this.readOnly = false,
   });
 
   @override
@@ -45,7 +43,7 @@ class CustomTextField extends StatelessWidget {
       onFieldSubmitted: onFieldSubmitted,
       maxLines: maxLines ?? 1,
       onTap: onTap,
-      readOnly: readOnly ?? false,
+      readOnly: onTap == null ? false : true,
       keyboardType: keyboardType,
       cursorColor: AppColors.black,
       cursorHeight: 22.h,

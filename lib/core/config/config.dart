@@ -2,11 +2,10 @@ import '../enums/env.dart';
 
 class Config {
   late final Env _env;
-  final String _devBaseUrl = 'https://restaurant-customer-seven.vercel.app/api';
-  final String _testBaseUrl =
-      'https://restaurant-customer-seven.vercel.app/api';
+  final String _devBaseUrl = 'https://http://restaurant-customer-seven.vercel.app';
+  final String _testBaseUrl = 'https://http://restaurant-customer-seven.vercel.app';
   final String _productionBaseUrl =
-      'https://restaurant-customer-seven.vercel.app/api';
+      'https://http://restaurant-customer-seven.vercel.app';
 
   late String _baseUrl;
 

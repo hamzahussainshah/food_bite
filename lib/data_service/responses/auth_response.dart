@@ -1,21 +1,20 @@
-import 'package:food_bite/data_service/responses/user_model.dart';
-
 import '../data_model/user_model.dart';
 import 'base_response/base_response.dart';
 
 class AuthResponse extends BaseResponse {
   String? accessToken;
-  User? profile;
+  UserModel? profile;
 
-  AuthResponse(bool success, {String? message, this.accessToken})
+  /// Default constructor
+  AuthResponse(success, {message, this.accessToken})
       : super(success, message: message);
 
-  AuthResponse.fromJson(dynamic json) : super.fromJson(json ?? {}) {
-    if (json is Map<String, dynamic>) {
-      accessToken = json['token'];
-      if (json['user'] != null) {
-        profile = User.fromMap(json['user']);
-      }
+  /// Named Constructor
+  AuthResponse.fromJson(json) : super.fromJson(json) {
+    if (json != null) accessToken = json['access_token'];
+
+    if (json != null && json['data'] != null) {
+      profile = UserModel.fromMap(json['data']);
     }
   }
 }

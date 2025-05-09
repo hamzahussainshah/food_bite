@@ -41,15 +41,10 @@ class CustomElevatedButton extends StatelessWidget {
         : backgroundColor ?? (isBgColor ? null : AppColors.white);
 
     final buttonGradient = (isBgColor && backgroundColor == null)
-        ? isDisabled
-            ? LinearGradient(
-                colors: [AppColors.gray200, AppColors.gray400],
-                stops: [0.0, 1.0],
-              )
-            : const LinearGradient(
-                colors: [AppColors.red90, AppColors.red60],
-                stops: [0.0, 1.0],
-              )
+        ? const LinearGradient(
+            colors: [AppColors.red90, AppColors.red60],
+            stops: [0.0, 1.0],
+          )
         : null;
 
     // Text style based on the original logic

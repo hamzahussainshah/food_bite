@@ -5,9 +5,8 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i36;
+import 'package:flutter/material.dart' as _i35;
 import 'package:flutter/material.dart';
-import 'package:food_bite/data_service/data_model/menu_model.dart' as _i37;
 import 'package:food_bite/ui/views/account_information/account_information_view.dart'
     as _i29;
 import 'package:food_bite/ui/views/add_address/add_address_view.dart' as _i7;
@@ -47,13 +46,11 @@ import 'package:food_bite/ui/views/reset_password/reset_password_view.dart'
     as _i12;
 import 'package:food_bite/ui/views/signup/signup_view.dart' as _i6;
 import 'package:food_bite/ui/views/startup/startup_view.dart' as _i3;
-import 'package:food_bite/ui/views/table_reservation/table_reservation_view.dart'
-    as _i35;
 import 'package:food_bite/ui/views/track/track_view.dart' as _i19;
 import 'package:food_bite/ui/views/verify_email/verify_email_view.dart' as _i11;
 import 'package:food_bite/ui/views/verify_otp/verify_otp_view.dart' as _i9;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i38;
+import 'package:stacked_services/stacked_services.dart' as _i36;
 
 class Routes {
   static const homeView = '/home-view';
@@ -122,8 +119,6 @@ class Routes {
 
   static const addCardView = '/add-card-view';
 
-  static const tableReservationView = '/table-reservation-view';
-
   static const all = <String>{
     homeView,
     startupView,
@@ -158,7 +153,6 @@ class Routes {
     paymentMethodsView,
     paymentCardsView,
     addCardView,
-    tableReservationView,
   };
 }
 
@@ -296,216 +290,204 @@ class StackedRouter extends _i1.RouterBase {
       Routes.addCardView,
       page: _i34.AddCardView,
     ),
-    _i1.RouteDef(
-      Routes.tableReservationView,
-      page: _i35.TableReservationView,
-    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.OnboardingView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.OnboardingView(),
         settings: data,
       );
     },
     _i5.LoginView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LoginView(),
         settings: data,
       );
     },
     _i6.SignupView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.SignupView(),
         settings: data,
       );
     },
     _i7.AddAddressView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.AddAddressView(),
         settings: data,
       );
     },
     _i8.AddPhoneView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.AddPhoneView(),
         settings: data,
       );
     },
     _i9.VerifyOtpView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.VerifyOtpView(),
         settings: data,
       );
     },
     _i10.AddEmailView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.AddEmailView(),
         settings: data,
       );
     },
     _i11.VerifyEmailView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i11.VerifyEmailView(),
         settings: data,
       );
     },
     _i12.ResetPasswordView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i12.ResetPasswordView(),
         settings: data,
       );
     },
     _i13.ConfirmView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i13.ConfirmView(),
         settings: data,
       );
     },
     _i14.NavigationView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i14.NavigationView(),
         settings: data,
       );
     },
     _i15.MenuView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i15.MenuView(),
         settings: data,
       );
     },
     _i16.CartView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i16.CartView(),
         settings: data,
       );
     },
     _i17.OrdersView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i17.OrdersView(),
         settings: data,
       );
     },
     _i18.ProfileView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i18.ProfileView(),
         settings: data,
       );
     },
     _i19.TrackView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i19.TrackView(),
         settings: data,
       );
     },
     _i20.HistoryView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i20.HistoryView(),
         settings: data,
       );
     },
     _i21.ItemDetailsView: (data) {
-      final args = data.getArgs<ItemDetailsViewArguments>(nullOk: false);
-      return _i36.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i21.ItemDetailsView(menu: args.menu, key: args.key),
+      return _i35.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i21.ItemDetailsView(),
         settings: data,
       );
     },
     _i22.CheckoutView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i22.CheckoutView(),
         settings: data,
       );
     },
     _i23.AddPaymentView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i23.AddPaymentView(),
         settings: data,
       );
     },
     _i24.ConfirmationView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i24.ConfirmationView(),
         settings: data,
       );
     },
     _i25.OrderDetailsView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i25.OrderDetailsView(),
         settings: data,
       );
     },
     _i26.RateDriverView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i26.RateDriverView(),
         settings: data,
       );
     },
     _i27.RateYourFoodView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i27.RateYourFoodView(),
         settings: data,
       );
     },
     _i28.ConfirmFeedbackView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i28.ConfirmFeedbackView(),
         settings: data,
       );
     },
     _i29.AccountInformationView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i29.AccountInformationView(),
         settings: data,
       );
     },
     _i30.ChangePasswordView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i30.ChangePasswordView(),
         settings: data,
       );
     },
     _i31.DeliveryLocationsView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i31.DeliveryLocationsView(),
         settings: data,
       );
     },
     _i32.PaymentMethodsView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i32.PaymentMethodsView(),
         settings: data,
       );
     },
     _i33.PaymentCardsView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i33.PaymentCardsView(),
         settings: data,
       );
     },
     _i34.AddCardView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
+      return _i35.MaterialPageRoute<dynamic>(
         builder: (context) => const _i34.AddCardView(),
-        settings: data,
-      );
-    },
-    _i35.TableReservationView: (data) {
-      return _i36.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i35.TableReservationView(),
         settings: data,
       );
     },
@@ -518,34 +500,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-class ItemDetailsViewArguments {
-  const ItemDetailsViewArguments({
-    required this.menu,
-    this.key,
-  });
-
-  final _i37.MenuItem menu;
-
-  final _i36.Key? key;
-
-  @override
-  String toString() {
-    return '{"menu": "$menu", "key": "$key"}';
-  }
-
-  @override
-  bool operator ==(covariant ItemDetailsViewArguments other) {
-    if (identical(this, other)) return true;
-    return other.menu == menu && other.key == key;
-  }
-
-  @override
-  int get hashCode {
-    return menu.hashCode ^ key.hashCode;
-  }
-}
-
-extension NavigatorStateExtension on _i38.NavigationService {
+extension NavigatorStateExtension on _i36.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -812,17 +767,14 @@ extension NavigatorStateExtension on _i38.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToItemDetailsView({
-    required _i37.MenuItem menu,
-    _i36.Key? key,
+  Future<dynamic> navigateToItemDetailsView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.itemDetailsView,
-        arguments: ItemDetailsViewArguments(menu: menu, key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1005,20 +957,6 @@ extension NavigatorStateExtension on _i38.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.addCardView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> navigateToTableReservationView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return navigateTo<dynamic>(Routes.tableReservationView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1291,17 +1229,14 @@ extension NavigatorStateExtension on _i38.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithItemDetailsView({
-    required _i37.MenuItem menu,
-    _i36.Key? key,
+  Future<dynamic> replaceWithItemDetailsView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.itemDetailsView,
-        arguments: ItemDetailsViewArguments(menu: menu, key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1484,20 +1419,6 @@ extension NavigatorStateExtension on _i38.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.addCardView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> replaceWithTableReservationView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return replaceWith<dynamic>(Routes.tableReservationView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

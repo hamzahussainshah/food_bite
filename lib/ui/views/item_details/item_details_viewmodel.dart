@@ -3,14 +3,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
-import '../../../data_service/data_model/menu_model.dart';
-import '../../../data_service/data_model/review.dart';
-import '../../../services/database_service.dart';
 
 class ItemDetailsViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final MenuItem menu; // Add menu to access its details and reviews
 
   String selectedSize = "M"; // Default size
   List<String> selectedAddOns = [
@@ -20,10 +15,44 @@ class ItemDetailsViewModel extends BaseViewModel {
   bool isFavorite = false; // Favorite state
   bool showReviews = false; // Toggle for showing reviews
 
+  // Sample list of reviews with an additional index for tracking
+  List<Map<String, dynamic>> reviews = [
+    {
+      "userName": "Sophia M",
+      "timestamp": "Today, 16:40",
+      "rating": 5,
+      "comment":
+          "Absolutely delicious! The crust is perfectly crispy, and the fresh mozzarella melts beautifully. This is my go to pizza every time!",
+      "likes": 68,
+      "images": [],
+    },
+    {
+      "userName": "Emma",
+      "timestamp": "Today, 09:12",
+      "rating": 5,
+      "comment":
+          "Loved the balance of flavors! The basil adds a nice freshness, and the tomato sauce is rich and tangy. Could use a bit more cheese, but still amazing!",
+      "likes": 132,
+      "images": [
+        AppImages.burger1,
+        AppImages.burger2,
+        AppImages.burger2,
+        AppImages.burger1,
+      ],
+    },
+    {
+      "userName": "Sophia M",
+      "timestamp": "Today, 16:40",
+      "rating": 5,
+      "comment":
+          "Absolutely delicious! The crust is perfectly crispy, and the fresh mozzarella melts beautifully. This is my go to pizza every time!",
+      "likes": 68,
+      "images": [],
+    },
+  ];
+
   // Track which reviews the user has liked (by index)
   List<int> userLikedReviews = [];
-
-  ItemDetailsViewModel({required this.menu});
 
   void selectSize(String size) {
     selectedSize = size;
@@ -53,19 +82,20 @@ class ItemDetailsViewModel extends BaseViewModel {
     if (userLikedReviews.contains(reviewIndex)) {
       // Unlike the review
       userLikedReviews.remove(reviewIndex);
-      // Note: Review model doesn't have a likes field; if needed, add it to the Review model
+      reviews[reviewIndex]["likes"] =
+          (reviews[reviewIndex]["likes"] as int) - 1;
     } else {
       // Like the review
       userLikedReviews.add(reviewIndex);
-      // Note: Review model doesn't have a likes field; if needed, add it to the Review model
+      reviews[reviewIndex]["likes"] =
+          (reviews[reviewIndex]["likes"] as int) + 1;
     }
     notifyListeners();
   }
 
   void addToCart() {
     // Handle add to cart logic
-    print(
-        "Added to cart: Item: ${menu.name}, Size: $selectedSize, Add-ons: $selectedAddOns");
+    print("Added to cart: Size: $selectedSize, Add-ons: $selectedAddOns");
   }
 
   void navigateBack() {

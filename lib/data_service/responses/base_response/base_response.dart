@@ -6,9 +6,9 @@ class BaseResponse {
   BaseResponse(this.success, {this.message, this.data});
 
   BaseResponse.fromJson(Map<String, dynamic> json) {
-    success = json['success'] ?? json['status'] ?? false;
+    success = json['success'] ?? false;
     message = json['message'] ?? 'An error occurred';
-    data = json['data'] ?? json['user'];
+    data = json['data'];
   }
 
   Map<String, dynamic> toJson() {

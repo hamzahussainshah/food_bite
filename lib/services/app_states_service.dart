@@ -4,5 +4,4 @@ class AppStatesService {
   }
 
   void init() {}
-  String? email;
 }

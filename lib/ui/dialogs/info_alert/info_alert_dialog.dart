@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_bite/ui/common/app_colors.dart';
-import 'package:food_bite/ui/widgets/custom_elevated_button.dart';
+import 'package:food_bite/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'info_alert_dialog_model.dart';
+
+const double _graphicSize = 60;
 
 class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
   final DialogRequest request;
@@ -24,54 +25,78 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
     Widget? child,
   ) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: Colors.white,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              request.title ?? "Confirm Action",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.black,
-              ),
-            ),
-            15.verticalSpace,
-            Text(
-              request.description ?? "Are you sure you want to continue?",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.gray800,
-              ),
-            ),
-            25.verticalSpace,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: CustomElevatedButton(
-                    isBgColor: false,
-                    backgroundColor: AppColors.white,
-                    textColor: AppColors.red90,
-                    text: "Cancel",
-                    onPressed: () =>
-                        completer(DialogResponse(confirmed: false)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        request.title!,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w900),
+                      ),
+                      verticalSpaceTiny,
+                      Text(
+                        request.description!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                        maxLines: 3,
+                        softWrap: true,
+                      ),
+                    ],
                   ),
                 ),
-                10.horizontalSpace,
-                Expanded(
-                  child: CustomElevatedButton(
-                    text: "Confirm",
-                    onPressed: () => completer(DialogResponse(confirmed: true)),
+                Container(
+                  width: _graphicSize,
+                  height: _graphicSize,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffF6E7B0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(_graphicSize / 2),
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '⭐️',
+                    style: TextStyle(fontSize: 30),
                   ),
                 )
               ],
             ),
+            verticalSpaceMedium,
+            GestureDetector(
+              onTap: () => completer(DialogResponse(
+                confirmed: true,
+              )),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Got it',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
