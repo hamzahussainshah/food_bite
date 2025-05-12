@@ -199,9 +199,9 @@ class MenuView extends StackedView<MenuViewModel> {
                                   description: item.description,
                                   price: item.price.toDouble(),
                                   isUrl: true,
-                                  rating:
-                                      4.0, // Optional: add rating in model if needed
-                                  imagePath: item.images.isNotEmpty
+                                  rating: viewModel.getAverageRating(item),
+
+                                imagePath: item.images.isNotEmpty
                                       ? item.images.first
                                       : AppImages.burger,
                                   onAdd: () {

@@ -54,6 +54,7 @@ class CartView extends StackedView<CartViewModel> {
                           Icons.shopping_cart_outlined,
                           size: 80.sp,
                           color: AppColors.gray500,
+
                         ),
                         16.verticalSpace,
                         Text(

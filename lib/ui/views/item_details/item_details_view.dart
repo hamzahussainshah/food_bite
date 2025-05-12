@@ -295,7 +295,7 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
               CustomElevatedButton(
                 text: "Add to Cart",
                 onPressed: () {
-                  viewModel.addToCart();
+                  viewModel.addItemToCart(menu);
                 },
               ),
               20.verticalSpace, // Bottom padding
@@ -527,8 +527,6 @@ class ItemDetailsView extends StackedView<ItemDetailsViewModel> {
 
   @override
   void onViewModelReady(ItemDetailsViewModel viewModel) {
-    print("IIIIIIIIIIIII!!!!!!!!!!!!!!!!${menu.images.first}");
-    print("IIIIIIIIIIIII@@@@@@@@@@@@@@@@${menu.images[1]}");
     // Future.delayed()
     super.onViewModelReady(viewModel);
   }

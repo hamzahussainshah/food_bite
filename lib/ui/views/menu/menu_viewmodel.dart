@@ -97,4 +97,15 @@ class MenuViewModel extends BaseViewModel {
   void navigateToItemDetailsView(MenuItem item) {
     _navigationService.navigateToItemDetailsView(menu: item);
   }
+
+  double getAverageRating(MenuItem item) {
+    if (item.reviews == null || item.reviews!.isEmpty) {
+      return 0.0;
+    }
+    double sum = 0.0;
+    for (var review in item.reviews!) {
+      sum += review.rating.toDouble(); // Convert int to double since API shows ratings as integers
+    }
+    return sum / item.reviews!.length;
+  }
 }
