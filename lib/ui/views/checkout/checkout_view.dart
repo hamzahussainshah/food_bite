@@ -220,7 +220,7 @@ class CheckoutView extends StackedView<CheckoutViewModel> {
                       CustomElevatedButton(
                         text: "Place Order",
                         onPressed: () {
-                          viewModel.placeOrder();
+                          viewModel.placeOrder(context);
                         },
                       ),
                       20.verticalSpace, // Bottom padding

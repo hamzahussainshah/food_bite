@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:food_bite/app/app.router.dart';
 import 'package:food_bite/ui/widgets/snackbar.dart';
 import 'package:stacked/stacked.dart';
@@ -7,33 +8,35 @@ import '../../../app/app.bottomsheets.dart';
 import '../../../app/app.locator.dart';
 import '../../../data_service/data_model/menu_model.dart';
 import '../../../data_service/data_model/order_model.dart';
+import '../../../services/app_states_service.dart';
 import '../../../services/database_service.dart';
 import '../../../services/local_storage_service.dart'; // Import LocalStorageService
 import '../../../services/order_service.dart';
 import '../../common/assets.dart';
 
-class HistoryViewModel extends BaseViewModel {
+class HistoryViewModel extends  BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final LocalStorageService _localStorageService =
       locator<LocalStorageService>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   final OrderService _ordersService = locator<OrderService>();
-  final LocalStorageService _storageService = locator<LocalStorageService>();
+  final AppStatesService _appStateService =
+      locator<AppStatesService>();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+
   List<Order> get ongoingOrders => _ordersService.ongoingOrders;
   List<Order> get historyOrders => _ordersService.historyOrders;
 
-  @override
-  List<ListenableServiceMixin> get reactiveServices => [_ordersService];
 
   Future<void> getUserOrders() async {
     _isLoading = true;
     await _ordersService.fetchOrders();
     _isLoading = false;
+    notifyListeners();
   }
 
   void cancelOrder(String orderId) async {
@@ -51,6 +54,7 @@ class HistoryViewModel extends BaseViewModel {
   List<Order> _ongoingOrders = [];
   List<Order> _historyOrders = [];
 
+
   // Expose the lists directly
 
   Map<String, MenuItem> _menuItemsMap = {};
@@ -58,9 +62,6 @@ class HistoryViewModel extends BaseViewModel {
   // Getter to return the appropriate list based on the tabIndex (for compatibility)
   List<Order> get orders => _tabIndex == 0 ? _ongoingOrders : _historyOrders;
 
-
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
 
   HistoryViewModel() {
     _fetchMenuItemsFromStorage();
@@ -131,6 +132,8 @@ class HistoryViewModel extends BaseViewModel {
   // }
 
   // Method to get the name of a menu item by its ID
+
+
   String getMenuItemName(String menuItemId) {
     return _menuItemsMap[menuItemId]?.name ??
         menuItemId; // Fallback to ID if name not found
@@ -189,6 +192,13 @@ class HistoryViewModel extends BaseViewModel {
     }
     notifyListeners();
     setBusy(false);
+  }
+
+  void checkForRefresh() {
+    if (_appStateService.shouldRefreshOrders) {
+      getUserOrders(); // Re-fetch updated orders
+      _appStateService.shouldRefreshOrders = false;
+    }
   }
 
   void navigateToMenuView() {

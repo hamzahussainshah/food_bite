@@ -12,7 +12,7 @@ import '../../common/text_styles.dart';
 import '../../widgets/order_rating_card.dart';
 import 'history_viewmodel.dart';
 
-class HistoryView extends StackedView<HistoryViewModel> {
+class HistoryView extends StackedView<HistoryViewModel> with RouteAware{
   const HistoryView({Key? key}) : super(key: key);
 
   @override
@@ -208,6 +208,9 @@ class HistoryView extends StackedView<HistoryViewModel> {
       ),
     );
   }
+
+
+
   @override
   void onViewModelReady(HistoryViewModel viewModel) {
     viewModel.getUserOrders();

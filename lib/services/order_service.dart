@@ -44,5 +44,4 @@ class OrderService with ListenableServiceMixin {
     _historyOrders.removeWhere((o) => o.id == orderId);
     notifyListeners();
   }
-
 }

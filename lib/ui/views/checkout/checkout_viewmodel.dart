@@ -12,14 +12,22 @@ import '../../../data_service/data_model/menu_model.dart';
 import '../../../data_service/data_model/update_address_model.dart';
 import '../../../data_service/responses/order_confirmation_response.dart';
 import '../../../data_service/responses/user_model.dart';
+import '../../../services/app_states_service.dart';
 import '../../../services/database_service.dart';
 import '../../../services/local_storage_service.dart';
+import '../../../services/order_service.dart';
 import '../../../ui/views/add_payment/add_payment_view.dart';
+import '../history/history_viewmodel.dart';
+import 'package:provider/provider.dart';
+
 
 class CheckoutViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final LocalStorageService _storageService = locator<LocalStorageService>();
+  final OrderService _ordersService = locator<OrderService>();
+  final AppStatesService _appStatesService =
+      locator<AppStatesService>();
   bool isLoading = false;
 
   User? userProfile;
@@ -101,13 +109,13 @@ class CheckoutViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> placeOrder() async {
+  Future<void> placeOrder(BuildContext context) async {
     if (cartItems.isEmpty) {
       showErrorSnackBar(
           "Error", "Your cart is empty. Please add items to proceed.");
       return;
     }
-    await confirmOrder();
+    await confirmOrder(context);
   }
 
   void navigateBack() {
@@ -160,7 +168,7 @@ class CheckoutViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> confirmOrder() async {
+  Future<void> confirmOrder(BuildContext context) async {
     setBusy(true);
     notifyListeners();
 
@@ -202,9 +210,7 @@ class CheckoutViewModel extends BaseViewModel {
       cartItems.clear();
       await _storageService.clearCart();
       notifyListeners();
-      _navigationService.popUntil(
-        (route) => route.settings.name == Routes.navigationView,
-      );
+      _navigationService.clearStackAndShow(Routes.navigationView);
       showSuccessSnackBar("Success", "Order placed successfully");
     } else {
       showErrorSnackBar("Error", "Error placing order: ${response.message}");

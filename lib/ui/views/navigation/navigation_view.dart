@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,53 +85,54 @@ class NavigationView extends StackedView<NavigationViewModel> {
                           ),
                         ),
                       ),
+                      // Spacer(),
+                      // CustomImageView(
+                      //   svgPath: AppIcons.locationArrow,
+                      //   fit: BoxFit.cover,
+                      //   width: 15.w,
+                      // ),
+                      // 12.horizontalSpace,
+                      // Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     Text(
+                      //       'Delivery to',
+                      //       style: AppTextStyles.xsMedium2.copyWith(
+                      //         color: AppColors.red90,
+                      //       ),
+                      //     ),
+                      //     Row(
+                      //       children: [
+                      //         Text(
+                      //           '1014 Prospect Vall',
+                      //           style: AppTextStyles.mediumLight.copyWith(
+                      //             color: AppColors.headingColor,
+                      //           ),
+                      //         ),
+                      //         InkWell(
+                      //           onTap: () {
+                      //             viewModel.changeLocation();
+                      //           },
+                      //           child: Icon(
+                      //             Icons.arrow_drop_down,
+                      //             color: AppColors.red90,
+                      //             size: 20.sp,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
                       Spacer(),
-                      CustomImageView(
-                        svgPath: AppIcons.locationArrow,
-                        fit: BoxFit.cover,
-                        width: 15.w,
-                      ),
-                      12.horizontalSpace,
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Delivery to',
-                            style: AppTextStyles.xsMedium2.copyWith(
-                              color: AppColors.red90,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '1014 Prospect Vall',
-                                style: AppTextStyles.mediumLight.copyWith(
-                                  color: AppColors.headingColor,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  viewModel.changeLocation();
-                                },
-                                child: Icon(
-                                  Icons.arrow_drop_down,
-                                  color: AppColors.red90,
-                                  size: 20.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      CustomImageView(
-                        width: 32.w,
-                        height: 32.h,
-                        imagePath: AppImages.profile,
-                        fit: BoxFit.cover,
-                        radius: BorderRadius.circular(12.r),
-                      ),
+                      InkWell(
+                        onTap: viewModel.navigateToCartView,
+                        child: Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 24,
+                          color: AppColors.gray700,
+                        ),
+                      )
                     ],
                   ),
                 ),
